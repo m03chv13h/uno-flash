@@ -89,10 +89,10 @@ export function getPassTarget(
   passDirection: 'left' | 'right',
   players: PlayerState[],
 ): PlayerIndex {
-  // From the current player's perspective:
-  // "pass left" = counterclockwise, "pass right" = clockwise
+  // From the current player's perspective (accounting for board rotation):
+  // "pass left" = clockwise, "pass right" = counterclockwise
   const dir: Direction =
-    passDirection === 'right' ? 'clockwise' : 'counterclockwise';
+    passDirection === 'left' ? 'clockwise' : 'counterclockwise';
   return getNextActivePlayer(current, dir, players);
 }
 
@@ -252,8 +252,8 @@ export function passAction(
   // For everything else, the player follows the current play direction.
   const expectedDir: 'left' | 'right' =
     command.type === 'reverse'
-      ? (direction === 'clockwise' ? 'left' : 'right')
-      : (direction === 'clockwise' ? 'right' : 'left');
+      ? (direction === 'clockwise' ? 'right' : 'left')
+      : (direction === 'clockwise' ? 'left' : 'right');
 
   if (passDir !== expectedDir) {
     return {
@@ -445,7 +445,7 @@ export function decideAIAction(
       return { type: 'uno' };
     }
     // Fail to react — pass (which is invalid, but the game handles it)
-    return { type: 'pass', passDir: direction === 'clockwise' ? 'right' : 'left' };
+    return { type: 'pass', passDir: direction === 'clockwise' ? 'left' : 'right' };
   }
 
   // Wild: press a lit button if available
@@ -454,7 +454,7 @@ export function decideAIAction(
     if (litIdx !== -1) {
       return { type: 'button', buttonNum: (litIdx + 1) as ButtonNumber };
     }
-    return { type: 'pass', passDir: direction === 'clockwise' ? 'right' : 'left' };
+    return { type: 'pass', passDir: direction === 'clockwise' ? 'left' : 'right' };
   }
 
   // Color command: press the button if lit, otherwise pass
@@ -465,7 +465,7 @@ export function decideAIAction(
     }
     return {
       type: 'pass',
-      passDir: direction === 'clockwise' ? 'right' : 'left',
+      passDir: direction === 'clockwise' ? 'left' : 'right',
     };
   }
 
@@ -473,7 +473,7 @@ export function decideAIAction(
   if (['skip', 'draw'].includes(command.type)) {
     return {
       type: 'pass',
-      passDir: direction === 'clockwise' ? 'right' : 'left',
+      passDir: direction === 'clockwise' ? 'left' : 'right',
     };
   }
 
@@ -481,9 +481,9 @@ export function decideAIAction(
   if (command.type === 'reverse') {
     return {
       type: 'pass',
-      passDir: direction === 'clockwise' ? 'left' : 'right',
+      passDir: direction === 'clockwise' ? 'right' : 'left',
     };
   }
 
-  return { type: 'pass', passDir: direction === 'clockwise' ? 'right' : 'left' };
+  return { type: 'pass', passDir: direction === 'clockwise' ? 'left' : 'right' };
 }
