@@ -65,7 +65,7 @@ export const ROUNDS_TO_WIN = 4;
 /** Turn order positions around the table: top, right, bottom, left */
 export const PLAYER_ROTATIONS: Record<PlayerIndex, number> = {
   0: 180,
-  1: 90,
+  1: 180,
   2: 0,
-  3: 270,
+  3: 180,
 };
