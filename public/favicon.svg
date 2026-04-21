@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="30" fill="#1a1a2e"/>
+  <!-- Four color quadrants representing UNO colors -->
+  <path d="M32 8 A24 24 0 0 1 56 32 L32 32 Z" fill="#e53935"/>
+  <path d="M56 32 A24 24 0 0 1 32 56 L32 32 Z" fill="#1e88e5"/>
+  <path d="M32 56 A24 24 0 0 1 8 32 L32 32 Z" fill="#43a047"/>
+  <path d="M8 32 A24 24 0 0 1 32 8 L32 32 Z" fill="#fdd835"/>
+  <!-- Center circle -->
+  <circle cx="32" cy="32" r="11" fill="#1a1a2e"/>
+  <!-- Lightning bolt (flash) -->
+  <polygon points="36,16 26,34 33,34 28,48 38,30 31,30" fill="#ffffff"/>
+  <!-- Outer ring -->
+  <circle cx="32" cy="32" r="30" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.3"/>
+</svg>
