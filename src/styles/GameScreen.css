@@ -292,19 +292,25 @@
   transform: rotate(180deg);
 }
 .player-station[data-position='1'] .station-inner {
-  transform: rotate(0deg);
+  transform: rotate(270deg);
 }
 .player-station[data-position='2'] .station-inner {
   transform: rotate(0deg);
 }
 .player-station[data-position='3'] .station-inner {
-  transform: rotate(0deg);
+  transform: rotate(90deg);
 }
 
-/* For side players, constrain the inner width */
+/* Side players: use parent height as inner width so content fills the
+   visible area after 90°/270° rotation, keeping numbers in one row. */
+.player-station[data-position='1'],
+.player-station[data-position='3'] {
+  container-type: size;
+}
+
 .player-station[data-position='1'] .station-inner,
 .player-station[data-position='3'] .station-inner {
-  width: 90%;
+  width: 90cqh;
   max-width: none;
 }
 
@@ -372,12 +378,11 @@
   flex-direction: row;
 }
 
-/* Side stations: vertical layout so they're readable rotated */
+/* Side stations: single row, readable after rotation */
 .player-station[data-position='1'] .color-buttons,
 .player-station[data-position='3'] .color-buttons {
   flex-direction: row;
-  flex-wrap: wrap;
-  max-width: 120px;
+  flex-wrap: nowrap;
 }
 
 .color-btn {
@@ -441,13 +446,6 @@
   display: flex;
   gap: 6px;
   justify-content: center;
-}
-
-/* Side players: stack pass buttons vertically so they remain visible on mobile */
-.player-station[data-position='1'] .pass-buttons,
-.player-station[data-position='3'] .pass-buttons {
-  flex-direction: column;
-  align-items: center;
 }
 
 .pass-btn {
