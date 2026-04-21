@@ -292,13 +292,13 @@
   transform: rotate(180deg);
 }
 .player-station[data-position='1'] .station-inner {
-  transform: rotate(180deg);
+  transform: rotate(270deg);
 }
 .player-station[data-position='2'] .station-inner {
-  transform: rotate(90deg);
+  transform: rotate(0deg);
 }
 .player-station[data-position='3'] .station-inner {
-  transform: rotate(180deg);
+  transform: rotate(90deg);
 }
 
 /* For side players, constrain the rotated inner */
