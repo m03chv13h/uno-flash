@@ -441,7 +441,7 @@
   transform: scale(0.92);
 }
 
-/* ── Pass buttons ── */
+/* ── Direction buttons ── */
 .pass-buttons {
   display: flex;
   gap: 6px;

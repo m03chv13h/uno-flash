@@ -62,21 +62,21 @@ export default function PlayerStation({ player, isActive }: Props) {
           })}
         </div>
 
-        {/* Pass buttons */}
+        {/* Direction buttons */}
         <div className="pass-buttons">
           <button
             className="pass-btn"
             disabled={!canAct}
             onClick={() => canAct && handlePass('left')}
           >
-            <span className="pass-arrow">←</span> PASS
+            <span className="pass-arrow">←</span> LEFT
           </button>
           <button
             className="pass-btn"
             disabled={!canAct}
             onClick={() => canAct && handlePass('right')}
           >
-            PASS <span className="pass-arrow">→</span>
+            RIGHT <span className="pass-arrow">→</span>
           </button>
         </div>
       </div>

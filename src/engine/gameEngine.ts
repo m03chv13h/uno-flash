@@ -247,6 +247,24 @@ export function passAction(
 ): MoveResult {
   const penaltiesEnabled = difficulty >= 2;
 
+  // Determine expected direction:
+  // For reverse commands, the player presses the direction they're changing TO.
+  // For everything else, the player follows the current play direction.
+  const expectedDir: 'left' | 'right' =
+    command.type === 'reverse'
+      ? (direction === 'clockwise' ? 'left' : 'right')
+      : (direction === 'clockwise' ? 'right' : 'left');
+
+  if (passDir !== expectedDir) {
+    return {
+      valid: false,
+      players,
+      direction,
+      nextPlayer: currentPlayer,
+      message: 'Wrong direction!',
+    };
+  }
+
   switch (command.type) {
     case 'color': {
       // Player must pass if button is not lit
@@ -436,7 +454,7 @@ export function decideAIAction(
     if (litIdx !== -1) {
       return { type: 'button', buttonNum: (litIdx + 1) as ButtonNumber };
     }
-    return { type: 'pass', passDir: 'right' };
+    return { type: 'pass', passDir: direction === 'clockwise' ? 'right' : 'left' };
   }
 
   // Color command: press the button if lit, otherwise pass
@@ -451,13 +469,21 @@ export function decideAIAction(
     };
   }
 
-  // Skip, Reverse, Draw: must pass
-  if (['skip', 'reverse', 'draw'].includes(command.type)) {
+  // Skip, Draw: must pass in the current play direction
+  if (['skip', 'draw'].includes(command.type)) {
     return {
       type: 'pass',
       passDir: direction === 'clockwise' ? 'right' : 'left',
     };
   }
 
-  return { type: 'pass', passDir: 'right' };
+  // Reverse: must pass in the reversed direction (the direction you're changing to)
+  if (command.type === 'reverse') {
+    return {
+      type: 'pass',
+      passDir: direction === 'clockwise' ? 'left' : 'right',
+    };
+  }
+
+  return { type: 'pass', passDir: direction === 'clockwise' ? 'right' : 'left' };
 }
