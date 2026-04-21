@@ -191,7 +191,6 @@ export function pressButton(
   players: PlayerState[],
   command: Command,
   direction: Direction,
-  _difficulty: Difficulty,
 ): MoveResult {
   const player = players[currentPlayer];
   const btnIdx = buttonNum - 1; // 0-based index into litButtons

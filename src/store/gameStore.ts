@@ -197,7 +197,7 @@ export const useGameStore = create<GameStore>((set, get) => {
 
     /* ── Handle button press ── */
     handleButtonPress: (buttonNum: ButtonNumber) => {
-      const { currentPlayer, players, currentCommand, direction, config, phase } =
+      const { currentPlayer, players, currentCommand, direction, phase } =
         get();
       if (phase !== 'playing' || !currentCommand) return;
       if (players[currentPlayer].type === 'empty') return;
@@ -210,7 +210,6 @@ export const useGameStore = create<GameStore>((set, get) => {
         players,
         currentCommand,
         direction,
-        config.difficulty,
       );
 
       if (!result.valid) {
