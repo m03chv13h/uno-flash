@@ -295,7 +295,7 @@
   transform: rotate(180deg);
 }
 .player-station[data-position='2'] .station-inner {
-  transform: rotate(0deg);
+  transform: rotate(90deg);
 }
 .player-station[data-position='3'] .station-inner {
   transform: rotate(180deg);

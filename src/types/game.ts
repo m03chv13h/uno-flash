@@ -66,6 +66,6 @@ export const ROUNDS_TO_WIN = 4;
 export const PLAYER_ROTATIONS: Record<PlayerIndex, number> = {
   0: 180,
   1: 180,
-  2: 0,
+  2: 90,
   3: 180,
 };
