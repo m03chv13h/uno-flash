@@ -1,6 +1,6 @@
 import { useGameStore } from '../store/gameStore';
 import { t } from '../i18n';
-import { ROUNDS_TO_WIN, PLAYER_ROTATIONS } from '../types/game';
+import { ROUNDS_TO_WIN } from '../types/game';
 
 export default function CenterConsole() {
   const currentCommand = useGameStore((s) => s.currentCommand);
@@ -15,7 +15,7 @@ export default function CenterConsole() {
   const isInstantUno = currentCommand?.type === 'instant_uno';
   const unoDisabled = phase !== 'playing' || !isInstantUno;
 
-  const rotation = PLAYER_ROTATIONS[currentPlayer];
+  const rotation = useGameStore((s) => s.consoleRotation);
   const isLandscape = currentPlayer === 1 || currentPlayer === 3;
 
   return (

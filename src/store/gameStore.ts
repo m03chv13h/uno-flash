@@ -13,6 +13,7 @@ import {
   type PlayerIndex,
   type PlayerState,
   PLAYER_INDICES,
+  PLAYER_ROTATIONS,
 } from '../types/game';
 import {
   createPlayers,
@@ -37,6 +38,7 @@ interface GameStore {
   phase: GamePhase;
   players: PlayerState[];
   currentPlayer: PlayerIndex;
+  consoleRotation: number;
   direction: Direction;
   currentCommand: Command | null;
   roundNumber: number;
@@ -58,6 +60,18 @@ interface GameStore {
 
 export const useGameStore = create<GameStore>((set, get) => {
   /* ── Internal helpers (not exposed on interface) ── */
+
+  /** Compute the next cumulative rotation that reaches `player`
+   *  via the shortest angular path (≤ 180°) from the current value. */
+  function smoothRotation(player: PlayerIndex): number {
+    const prev = get().consoleRotation;
+    const target = PLAYER_ROTATIONS[player];
+    const prevMod = ((prev % 360) + 360) % 360;
+    let delta = target - prevMod;
+    if (delta > 180) delta -= 360;
+    if (delta <= -180) delta += 360;
+    return prev + delta;
+  }
 
   function scheduleAI() {
     const { currentPlayer, players, config, currentCommand } = get();
@@ -153,6 +167,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       label: `Player ${i + 1}`,
     })),
     currentPlayer: 0 as PlayerIndex,
+    consoleRotation: PLAYER_ROTATIONS[0],
     direction: 'clockwise',
     currentCommand: null,
     roundNumber: 1,
@@ -182,6 +197,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         roundWinner: null,
         gameWinner: null,
         currentPlayer: firstActive,
+        consoleRotation: PLAYER_ROTATIONS[firstActive],
         direction: 'clockwise',
         statusMessage: '',
         currentCommand: null,
@@ -230,7 +246,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         return;
       }
 
-      set({ currentPlayer: result.nextPlayer });
+      set({ currentPlayer: result.nextPlayer, consoleRotation: smoothRotation(result.nextPlayer) });
       nextTurn();
     },
 
@@ -265,7 +281,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         statusMessage: result.message ?? '',
       });
 
-      set({ currentPlayer: result.nextPlayer });
+      set({ currentPlayer: result.nextPlayer, consoleRotation: smoothRotation(result.nextPlayer) });
       nextTurn();
     },
 
@@ -300,7 +316,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         return;
       }
 
-      set({ currentPlayer: result.nextPlayer });
+      set({ currentPlayer: result.nextPlayer, consoleRotation: smoothRotation(result.nextPlayer) });
       nextTurn();
     },
 
@@ -317,6 +333,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         roundNumber: nextRoundNum,
         roundWinner: null,
         currentPlayer: firstActive,
+        consoleRotation: PLAYER_ROTATIONS[firstActive],
         direction: 'clockwise',
         statusMessage: '',
         currentCommand: null,
