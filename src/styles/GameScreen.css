@@ -114,6 +114,34 @@
   max-width: none;
 }
 
+/* Main content wrapper (command + UNO) */
+.console-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+/* In landscape, place command and UNO side-by-side so nothing is hidden */
+.center-console-inner.landscape .console-main {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.center-console-inner.landscape .command-display {
+  flex: 1;
+  min-width: 0;
+}
+
+.uno-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
 /* Command display */
 .command-display {
   width: 100%;

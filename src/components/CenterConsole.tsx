@@ -24,11 +24,29 @@ export default function CenterConsole() {
         className={`center-console-inner ${isLandscape ? 'landscape' : ''}`}
         style={{ transform: `rotate(${rotation}deg)` }}
       >
-        {/* Command display */}
-        <div className="command-display">
-          <div className="command-label">{t('command', lang)}</div>
-          <div className="command-text">
-            {currentCommand?.displayText ?? '—'}
+        {/* Command + UNO row (side-by-side in landscape) */}
+        <div className="console-main">
+          <div className="command-display">
+            <div className="command-label">{t('command', lang)}</div>
+            <div className="command-text">
+              {currentCommand?.displayText ?? '—'}
+            </div>
+          </div>
+
+          <div className="uno-section">
+            <div className="uno-btn-wrap">
+              <button
+                className={`uno-btn ${unoDisabled ? 'disabled' : ''}`}
+                disabled={unoDisabled}
+                onClick={handleUnoPress}
+              >
+                UNO
+              </button>
+            </div>
+            <div className="instant-indicator">
+              <span className={`instant-dot ${isInstantUno ? 'active' : ''}`} />
+              {t('instant_uno', lang)}
+            </div>
           </div>
         </div>
 
@@ -46,23 +64,6 @@ export default function CenterConsole() {
               {direction === 'clockwise' ? '→' : '←'}
             </div>
           </div>
-        </div>
-
-        {/* UNO button */}
-        <div className="uno-btn-wrap">
-          <button
-            className={`uno-btn ${unoDisabled ? 'disabled' : ''}`}
-            disabled={unoDisabled}
-            onClick={handleUnoPress}
-          >
-            UNO
-          </button>
-        </div>
-
-        {/* Instant UNO indicator */}
-        <div className="instant-indicator">
-          <span className={`instant-dot ${isInstantUno ? 'active' : ''}`} />
-          {t('instant_uno', lang)}
         </div>
       </div>
     </div>
