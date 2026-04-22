@@ -93,6 +93,7 @@
     0 4px 24px rgba(0, 0, 0, 0.6);
   position: relative;
   overflow: hidden;
+  container-type: size;
 }
 
 .center-console-inner {
@@ -103,6 +104,14 @@
   gap: 6px;
   width: 100%;
   transition: transform 0.4s ease;
+}
+
+/* Side players (90° / 270° rotation): use parent height as inner width
+   so content fills the visible area after rotation, matching the
+   pattern used by .station-inner for side player stations. */
+.center-console-inner.landscape {
+  width: 90cqh;
+  max-width: none;
 }
 
 /* Command display */
