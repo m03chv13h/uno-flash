@@ -16,11 +16,12 @@ export default function CenterConsole() {
   const unoDisabled = phase !== 'playing' || !isInstantUno;
 
   const rotation = PLAYER_ROTATIONS[currentPlayer];
+  const isLandscape = currentPlayer === 1 || currentPlayer === 3;
 
   return (
     <div className="center-console">
       <div
-        className="center-console-inner"
+        className={`center-console-inner ${isLandscape ? 'landscape' : ''}`}
         style={{ transform: `rotate(${rotation}deg)` }}
       >
         {/* Command display */}
