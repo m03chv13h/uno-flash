@@ -327,8 +327,8 @@ export function passAction(
     case 'draw': {
       // Passing gives a penalty to the targeted neighbour (1-3 buttons relit)
       const target = getPassTarget(currentPlayer, passDir, players);
-      const drawCount = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3
-      const updated = applyPenalty(players, target, drawCount);
+      const penaltyCount = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3
+      const updated = applyPenalty(players, target, penaltyCount);
       return {
         valid: true,
         players: updated,
