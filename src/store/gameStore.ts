@@ -20,6 +20,7 @@ import {
   decideAIAction,
   generateCommand,
   getAIDelay,
+  getNextActivePlayer,
   hasWonGame,
   hasWonRound,
   passAction,
@@ -115,6 +116,15 @@ export const useGameStore = create<GameStore>((set, get) => {
       set({ currentCommand: cmd });
       scheduleAI();
     }, 400);
+  }
+
+  /** Advance to the next player keeping the same command (used on mistakes at difficulty >= 2). */
+  function advanceToNextPlayerSameCommand() {
+    const { currentPlayer, players, direction } = get();
+    const next = getNextActivePlayer(currentPlayer, direction, players);
+    set({ currentPlayer: next, consoleRotation: smoothRotation(next) });
+    // Re-schedule AI for the new player without generating a new command
+    setTimeout(() => scheduleAI(), 400);
   }
 
   function handleRoundWin(winner: PlayerIndex) {
@@ -213,7 +223,7 @@ export const useGameStore = create<GameStore>((set, get) => {
 
     /* ── Handle button press ── */
     handleButtonPress: (buttonNum: ButtonNumber) => {
-      const { currentPlayer, players, currentCommand, direction, phase } =
+      const { currentPlayer, players, currentCommand, direction, config, phase } =
         get();
       if (phase !== 'playing' || !currentCommand) return;
       if (players[currentPlayer].type === 'empty') return;
@@ -231,6 +241,9 @@ export const useGameStore = create<GameStore>((set, get) => {
       if (!result.valid) {
         audioManager.invalidMove();
         set({ statusMessage: 'Invalid move!' });
+        if (config.difficulty >= 2) {
+          advanceToNextPlayerSameCommand();
+        }
         return;
       }
 
@@ -270,7 +283,10 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       if (!result.valid) {
         audioManager.invalidMove();
-        set({ statusMessage: 'Invalid move!' });
+        set({ statusMessage: result.message ?? 'Invalid move!' });
+        if (config.difficulty >= 2) {
+          advanceToNextPlayerSameCommand();
+        }
         return;
       }
 
@@ -302,6 +318,9 @@ export const useGameStore = create<GameStore>((set, get) => {
       if (!result.valid) {
         audioManager.invalidMove();
         set({ statusMessage: 'UNO button only for Instant UNO!' });
+        if (get().config.difficulty >= 2) {
+          advanceToNextPlayerSameCommand();
+        }
         return;
       }
 
