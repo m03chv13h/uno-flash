@@ -255,7 +255,8 @@ export function passAction(
       ? (direction === 'clockwise' ? 'right' : 'left')
       : (direction === 'clockwise' ? 'left' : 'right');
 
-  if (passDir !== expectedDir) {
+  // Draw allows passing in either direction (player chooses target)
+  if (command.type !== 'draw' && passDir !== expectedDir) {
     return {
       valid: false,
       players,
@@ -324,9 +325,10 @@ export function passAction(
     }
 
     case 'draw': {
-      // Passing gives a penalty to the targeted neighbour
+      // Passing gives a penalty to the targeted neighbour (1-3 buttons relit)
       const target = getPassTarget(currentPlayer, passDir, players);
-      const updated = applyPenalty(players, target);
+      const drawCount = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3
+      const updated = applyPenalty(players, target, drawCount);
       return {
         valid: true,
         players: updated,
@@ -400,24 +402,35 @@ export function pressUnoButton(
 /* ─── Penalty helper ──────────────────────── */
 
 /**
- * V1 simplified penalty: re-light one turned-off button if possible.
- * If all 4 are already lit, nothing happens.
+ * Re-light turned-off buttons as a penalty.
+ * @param count Number of buttons to re-light (default 1). Capped at available off buttons.
  */
 function applyPenalty(
   players: PlayerState[],
   targetIdx: PlayerIndex,
+  count = 1,
 ): PlayerState[] {
   const target = players[targetIdx];
   const offIndices = target.litButtons
     .map((lit, i) => (!lit ? i : -1))
     .filter((i) => i !== -1);
 
-  if (offIndices.length === 0) return players; // all lit, V1 cap
+  if (offIndices.length === 0) return players; // all lit, nothing to do
 
-  const relightIdx = offIndices[Math.floor(Math.random() * offIndices.length)];
+  const toRelight = Math.min(count, offIndices.length);
+
+  // Shuffle and pick `toRelight` indices
+  const shuffled = [...offIndices];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
   const updated = [...players];
   const pCopy = { ...target, litButtons: [...target.litButtons] };
-  pCopy.litButtons[relightIdx] = true;
+  for (let k = 0; k < toRelight; k++) {
+    pCopy.litButtons[shuffled[k]] = true;
+  }
   updated[targetIdx] = pCopy;
   return updated;
 }
@@ -469,11 +482,19 @@ export function decideAIAction(
     };
   }
 
-  // Skip, Draw: must pass in the current play direction
-  if (['skip', 'draw'].includes(command.type)) {
+  // Skip: must pass in the current play direction
+  if (command.type === 'skip') {
     return {
       type: 'pass',
       passDir: direction === 'clockwise' ? 'left' : 'right',
+    };
+  }
+
+  // Draw: can pass in either direction (randomly pick a target)
+  if (command.type === 'draw') {
+    return {
+      type: 'pass',
+      passDir: Math.random() < 0.5 ? 'left' : 'right',
     };
   }
 
