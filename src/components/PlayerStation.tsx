@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import type { PlayerState, ButtonNumber } from '../types/game';
 import { BUTTON_MAP, BUTTON_NUMBERS } from '../types/game';
+import { t } from '../i18n';
 
 interface Props {
   player: PlayerState;
@@ -11,6 +12,9 @@ export default function PlayerStation({ player, isActive }: Props) {
   const handleButtonPress = useGameStore((s) => s.handleButtonPress);
   const handlePass = useGameStore((s) => s.handlePass);
   const phase = useGameStore((s) => s.phase);
+
+  const config = useGameStore((s) => s.config);
+  const lang = config.language;
 
   const isEmpty = player.type === 'empty';
   const canAct = isActive && !isEmpty && phase === 'playing' && player.type === 'human';
@@ -69,14 +73,14 @@ export default function PlayerStation({ player, isActive }: Props) {
             disabled={!canAct}
             onClick={() => canAct && handlePass('left')}
           >
-            <span className="pass-arrow">←</span> LEFT
+            <span className="pass-arrow">←</span> {t('pass_left', lang)}
           </button>
           <button
             className="pass-btn"
             disabled={!canAct}
             onClick={() => canAct && handlePass('right')}
           >
-            RIGHT <span className="pass-arrow">→</span>
+            {t('pass_right', lang)} <span className="pass-arrow">→</span>
           </button>
         </div>
       </div>

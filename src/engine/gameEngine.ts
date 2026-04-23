@@ -126,21 +126,21 @@ export function generateCommand(difficulty: Difficulty): Command {
       return {
         type: 'color',
         targetButton: num,
-        displayText: useColor ? color.toUpperCase() : String(num),
+        displayText: useColor ? `cmd_${color}` : `cmd_${num}`,
       };
     }
     case 'skip':
-      return { type: 'skip', displayText: 'SKIP' };
+      return { type: 'skip', displayText: 'cmd_skip' };
     case 'reverse':
-      return { type: 'reverse', displayText: 'REVERSE' };
+      return { type: 'reverse', displayText: 'cmd_reverse' };
     case 'draw':
-      return { type: 'draw', displayText: 'DRAW' };
+      return { type: 'draw', displayText: 'cmd_draw' };
     case 'wild':
-      return { type: 'wild', displayText: 'WILD' };
+      return { type: 'wild', displayText: 'cmd_wild' };
     case 'instant_uno':
-      return { type: 'instant_uno', displayText: 'INSTANT UNO!' };
+      return { type: 'instant_uno', displayText: 'cmd_instant_uno' };
     default:
-      return { type: 'color', targetButton: 1, displayText: 'RED' };
+      return { type: 'color', targetButton: 1, displayText: 'cmd_red' };
   }
 }
 
