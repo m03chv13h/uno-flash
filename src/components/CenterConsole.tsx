@@ -1,5 +1,5 @@
 import { useGameStore } from '../store/gameStore';
-import { t } from '../i18n';
+import { t, type TranslationKey } from '../i18n';
 import { ROUNDS_TO_WIN } from '../types/game';
 
 export default function CenterConsole() {
@@ -29,7 +29,7 @@ export default function CenterConsole() {
           <div className="command-display">
             <div className="command-label">{t('command', lang)}</div>
             <div className="command-text">
-              {currentCommand?.displayText ?? '—'}
+              {currentCommand ? t(currentCommand.displayText as TranslationKey, lang) : '—'}
             </div>
           </div>
 
