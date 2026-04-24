@@ -292,8 +292,8 @@ export function passAction(
         };
       }
       // Penalty: relight a turned off button if any
-      const hasOffButtons = players[currentPlayer].litButtons.some((lit) => !lit);
-      if (!hasOffButtons) {
+      const hasButtonsToRelight = players[currentPlayer].litButtons.some((lit) => !lit);
+      if (!hasButtonsToRelight) {
         // All buttons already lit — can't relight more; treat as invalid
         // so the store keeps the same command (advanceToNextPlayerSameCommand)
         return {
