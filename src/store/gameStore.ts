@@ -31,6 +31,7 @@ import {
   resetButtonsForRound,
 } from '../engine/gameEngine';
 import { audioManager } from '../audio/audioManager';
+import { t } from '../i18n';
 
 interface GameStore {
   /* ── Configuration ── */
@@ -132,7 +133,7 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       audioManager.timeout();
       const updated = applyPenalty(st.players, currentPlayer);
-      set({ players: updated, statusMessage: 'Too slow! Penalty!' });
+      set({ players: updated, statusMessage: t('too_slow', st.config.language) });
 
       const next = getNextActivePlayer(currentPlayer, st.direction, updated);
       set({ currentPlayer: next, consoleRotation: smoothRotation(next) });
