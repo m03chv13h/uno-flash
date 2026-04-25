@@ -292,6 +292,18 @@ export function passAction(
         };
       }
       // Penalty: relight a turned off button if any
+      const hasButtonsToRelight = players[currentPlayer].litButtons.some((lit) => !lit);
+      if (!hasButtonsToRelight) {
+        // All buttons already lit — can't relight more; treat as invalid
+        // so the store keeps the same command (advanceToNextPlayerSameCommand)
+        return {
+          valid: false,
+          players,
+          direction,
+          nextPlayer: currentPlayer,
+          message: 'Wrong move! All buttons already lit!',
+        };
+      }
       const updated = applyPenalty(players, currentPlayer);
       return {
         valid: true,
