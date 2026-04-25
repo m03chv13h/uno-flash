@@ -16,11 +16,13 @@ import {
   PLAYER_ROTATIONS,
 } from '../types/game';
 import {
+  applyPenalty,
   createPlayers,
   decideAIAction,
   generateCommand,
   getAIDelay,
   getNextActivePlayer,
+  getTurnTime,
   hasWonGame,
   hasWonRound,
   passAction,
@@ -57,6 +59,7 @@ interface GameStore {
 
   /* Internal timer refs */
   _aiTimer: ReturnType<typeof setTimeout> | null;
+  _turnTimer: ReturnType<typeof setTimeout> | null;
 }
 
 export const useGameStore = create<GameStore>((set, get) => {
@@ -108,6 +111,41 @@ export const useGameStore = create<GameStore>((set, get) => {
     set({ _aiTimer: timer });
   }
 
+  function clearTurnTimer() {
+    const { _turnTimer } = get();
+    if (_turnTimer) clearTimeout(_turnTimer);
+    set({ _turnTimer: null });
+  }
+
+  function scheduleTurnTimer() {
+    clearTurnTimer();
+    const { currentPlayer, players, config, currentCommand } = get();
+    if (config.difficulty < 2) return;
+    const player = players[currentPlayer];
+    if (player.type !== 'human' || !currentCommand) return;
+
+    const timeout = getTurnTime(config.difficulty);
+    const timer = setTimeout(() => {
+      const st = get();
+      if (st.phase !== 'playing' || st.currentPlayer !== currentPlayer) return;
+      if (!st.currentCommand) return;
+
+      audioManager.timeout();
+      const updated = applyPenalty(st.players, currentPlayer);
+      set({ players: updated, statusMessage: 'Too slow! Penalty!' });
+
+      const next = getNextActivePlayer(currentPlayer, st.direction, updated);
+      set({ currentPlayer: next, consoleRotation: smoothRotation(next) });
+      // Re-schedule AI or turn timer for the new player without generating a new command
+      setTimeout(() => {
+        scheduleAI();
+        scheduleTurnTimer();
+      }, 400);
+    }, timeout);
+
+    set({ _turnTimer: timer });
+  }
+
   function nextTurn() {
     const { config } = get();
     setTimeout(() => {
@@ -115,6 +153,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       audioManager.commandFeedback();
       set({ currentCommand: cmd });
       scheduleAI();
+      scheduleTurnTimer();
     }, 400);
   }
 
@@ -123,13 +162,17 @@ export const useGameStore = create<GameStore>((set, get) => {
     const { currentPlayer, players, direction } = get();
     const next = getNextActivePlayer(currentPlayer, direction, players);
     set({ currentPlayer: next, consoleRotation: smoothRotation(next) });
-    // Re-schedule AI for the new player without generating a new command
-    setTimeout(() => scheduleAI(), 400);
+    // Re-schedule AI or turn timer for the new player without generating a new command
+    setTimeout(() => {
+      scheduleAI();
+      scheduleTurnTimer();
+    }, 400);
   }
 
   function handleRoundWin(winner: PlayerIndex) {
     const { players, _aiTimer } = get();
     if (_aiTimer) clearTimeout(_aiTimer);
+    clearTurnTimer();
 
     audioManager.roundWin();
 
@@ -185,6 +228,7 @@ export const useGameStore = create<GameStore>((set, get) => {
     gameWinner: null,
     statusMessage: '',
     _aiTimer: null,
+    _turnTimer: null,
 
     /* ── Config ── */
     setConfig: (cfg) =>
@@ -218,6 +262,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         audioManager.commandFeedback();
         set({ currentCommand: cmd });
         scheduleAI();
+        scheduleTurnTimer();
       }, 500);
     },
 
@@ -228,6 +273,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       if (phase !== 'playing' || !currentCommand) return;
       if (players[currentPlayer].type === 'empty') return;
 
+      clearTurnTimer();
       audioManager.buttonPress();
 
       const result = pressButton(
@@ -270,6 +316,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       if (phase !== 'playing' || !currentCommand) return;
       if (players[currentPlayer].type === 'empty') return;
 
+      clearTurnTimer();
       audioManager.pass();
 
       const result = passAction(
@@ -306,6 +353,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       const { currentPlayer, players, currentCommand, direction, phase } = get();
       if (phase !== 'playing' || !currentCommand) return;
 
+      clearTurnTimer();
       audioManager.instantUno();
 
       const result = pressUnoButton(
@@ -363,6 +411,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         audioManager.commandFeedback();
         set({ currentCommand: cmd });
         scheduleAI();
+        scheduleTurnTimer();
       }, 400);
     },
 
@@ -370,6 +419,7 @@ export const useGameStore = create<GameStore>((set, get) => {
     backToSetup: () => {
       const { _aiTimer } = get();
       if (_aiTimer) clearTimeout(_aiTimer);
+      clearTurnTimer();
       set({
         phase: 'setup',
         currentCommand: null,

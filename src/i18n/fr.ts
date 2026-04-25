@@ -54,6 +54,9 @@ const fr = {
   continue_btn: 'CONTINUER',
   back_to_menu: 'RETOUR AU MENU',
 
+  // Timer
+  too_slow: 'Trop lent ! Pénalité !',
+
   // Difficulty descriptions
   diff_1: 'Facile — Pas de pénalités',
   diff_2: 'Normal — Pénalités activées',
