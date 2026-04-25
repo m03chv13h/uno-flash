@@ -54,6 +54,9 @@ const de = {
   continue_btn: 'WEITER',
   back_to_menu: 'ZURÜCK ZUM MENÜ',
 
+  // Timer
+  too_slow: 'Zu langsam! Strafe!',
+
   // Difficulty descriptions
   diff_1: 'Leicht — Keine Strafen',
   diff_2: 'Normal — Strafen aktiv',

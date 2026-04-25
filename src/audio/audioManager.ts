@@ -103,4 +103,9 @@ export const audioManager = {
   pass() {
     playTone(350, 0.12, 'sine', 0.1);
   },
+
+  timeout() {
+    playTone(150, 0.3, 'sawtooth', 0.15);
+    setTimeout(() => playTone(120, 0.3, 'sawtooth', 0.12), 200);
+  },
 };

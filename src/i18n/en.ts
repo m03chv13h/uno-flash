@@ -54,6 +54,9 @@ const en = {
   continue_btn: 'CONTINUE',
   back_to_menu: 'BACK TO MENU',
 
+  // Timer
+  too_slow: 'Too slow! Penalty!',
+
   // Difficulty descriptions
   diff_1: 'Easy — No penalties',
   diff_2: 'Normal — Penalties on',
