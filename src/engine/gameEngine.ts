@@ -417,7 +417,7 @@ export function pressUnoButton(
  * Re-light turned-off buttons as a penalty.
  * @param count Number of buttons to re-light (default 1). Capped at available off buttons.
  */
-function applyPenalty(
+export function applyPenalty(
   players: PlayerState[],
   targetIdx: PlayerIndex,
   count = 1,
