@@ -322,9 +322,12 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       if (!result.valid) {
         audioManager.invalidMove();
-        set({ statusMessage: 'Invalid move!' });
         if (config.difficulty >= 2) {
+          const penalized = applyPenalty(players, currentPlayer);
+          set({ players: penalized, statusMessage: 'Invalid move! Penalty!' });
           advanceToNextPlayerSameCommand();
+        } else {
+          set({ statusMessage: 'Invalid move!' });
         }
         return;
       }
@@ -367,9 +370,12 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       if (!result.valid) {
         audioManager.invalidMove();
-        set({ statusMessage: result.message ?? 'Invalid move!' });
         if (config.difficulty >= 2) {
+          const penalized = applyPenalty(players, currentPlayer);
+          set({ players: penalized, statusMessage: result.message ?? 'Invalid move! Penalty!' });
           advanceToNextPlayerSameCommand();
+        } else {
+          set({ statusMessage: result.message ?? 'Invalid move!' });
         }
         return;
       }
@@ -403,9 +409,12 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       if (!result.valid) {
         audioManager.invalidMove();
-        set({ statusMessage: 'UNO button only for Instant UNO!' });
         if (get().config.difficulty >= 2) {
+          const penalized = applyPenalty(players, currentPlayer);
+          set({ players: penalized, statusMessage: 'UNO button only for Instant UNO! Penalty!' });
           advanceToNextPlayerSameCommand();
+        } else {
+          set({ statusMessage: 'UNO button only for Instant UNO!' });
         }
         return;
       }
