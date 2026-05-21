@@ -29,7 +29,9 @@ export default function CenterConsole() {
           <div className="command-display">
             <div className="command-label">{t('command', lang)}</div>
             <div className="command-text">
-              {currentCommand ? t(currentCommand.displayText as TranslationKey, lang) : '—'}
+              {config.gameMode === 'audio'
+                ? (currentCommand ? '🔊' : '—')
+                : (currentCommand ? t(currentCommand.displayText as TranslationKey, lang) : '—')}
             </div>
           </div>
 

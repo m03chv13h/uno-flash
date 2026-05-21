@@ -12,6 +12,12 @@
 let audioCtx: AudioContext | null = null;
 let _enabled = true;
 
+const SPEECH_LANG_MAP: Record<string, string> = {
+  en: 'en-US',
+  de: 'de-DE',
+  fr: 'fr-FR',
+};
+
 function getCtx(): AudioContext {
   if (!audioCtx) {
     audioCtx = new AudioContext();
@@ -107,5 +113,20 @@ export const audioManager = {
   timeout() {
     playTone(150, 0.3, 'sawtooth', 0.15);
     setTimeout(() => playTone(120, 0.3, 'sawtooth', 0.12), 200);
+  },
+
+  /** Speak a command aloud using the Web Speech API */
+  speakCommand(text: string, lang: string) {
+    if (!_enabled) return;
+    try {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = SPEECH_LANG_MAP[lang] || 'en-US';
+      utterance.rate = 1.1;
+      utterance.volume = 1;
+      window.speechSynthesis.speak(utterance);
+    } catch {
+      /* ignore speech synthesis errors */
+    }
   },
 };

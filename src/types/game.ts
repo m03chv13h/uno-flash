@@ -7,6 +7,7 @@ export type ButtonNumber = 1 | 2 | 3 | 4;
 export type Direction = 'clockwise' | 'counterclockwise';
 export type PlayerType = 'human' | 'ai' | 'empty';
 export type Difficulty = 1 | 2 | 3 | 4;
+export type GameMode = 'text' | 'audio';
 export type PlayerIndex = 0 | 1 | 2 | 3;
 
 export interface PlayerState {
@@ -37,6 +38,7 @@ export type GamePhase = 'setup' | 'playing' | 'round_over' | 'game_over';
 
 export interface GameConfig {
   difficulty: Difficulty;
+  gameMode: GameMode;
   language: string;
   playerCount: number;
   fillWithAI: boolean;

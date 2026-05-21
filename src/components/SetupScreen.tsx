@@ -115,6 +115,29 @@ export default function SetupScreen() {
         </div>
       </div>
 
+      {/* Game Mode */}
+      <div className="setup-panel">
+        <h3>{t('game_mode', lang)}</h3>
+        <div className="difficulty-options">
+          {(['text', 'audio'] as const).map((mode) => (
+            <button
+              key={mode}
+              className={`diff-btn ${config.gameMode === mode ? 'active' : ''}`}
+              onClick={() => {
+                audioManager.resume();
+                audioManager.buttonPress();
+                setConfig({ gameMode: mode });
+              }}
+            >
+              {t(mode === 'text' ? 'mode_text' : 'mode_audio', lang)}
+              <span className="diff-label">
+                {t(mode === 'text' ? 'mode_text_desc' : 'mode_audio_desc', lang)}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Rules */}
       <div className="setup-panel">
         <h3>{t('rules_title', lang)}</h3>

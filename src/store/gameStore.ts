@@ -31,7 +31,7 @@ import {
   resetButtonsForRound,
 } from '../engine/gameEngine';
 import { audioManager } from '../audio/audioManager';
-import { t } from '../i18n';
+import { t, type TranslationKey } from '../i18n';
 
 interface GameStore {
   /* ── Configuration ── */
@@ -147,12 +147,22 @@ export const useGameStore = create<GameStore>((set, get) => {
     set({ _turnTimer: timer });
   }
 
+  /** Issue a new command: set state, play feedback, and speak in audio mode. */
+  function issueCommand(cmd: Command) {
+    const { config } = get();
+    audioManager.commandFeedback();
+    set({ currentCommand: cmd });
+    if (config.gameMode === 'audio') {
+      const spokenText = t(cmd.displayText as TranslationKey, config.language);
+      audioManager.speakCommand(spokenText, config.language);
+    }
+  }
+
   function nextTurn() {
     const { config } = get();
     setTimeout(() => {
       const cmd = generateCommand(config.difficulty);
-      audioManager.commandFeedback();
-      set({ currentCommand: cmd });
+      issueCommand(cmd);
       scheduleAI();
       scheduleTurnTimer();
     }, 400);
@@ -206,6 +216,7 @@ export const useGameStore = create<GameStore>((set, get) => {
     /* ── Defaults ── */
     config: {
       difficulty: 1 as Difficulty,
+      gameMode: 'text' as const,
       language: 'en',
       playerCount: 2,
       fillWithAI: true,
@@ -260,8 +271,7 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       setTimeout(() => {
         const cmd = generateCommand(config.difficulty);
-        audioManager.commandFeedback();
-        set({ currentCommand: cmd });
+        issueCommand(cmd);
         scheduleAI();
         scheduleTurnTimer();
       }, 500);
@@ -409,8 +419,7 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       setTimeout(() => {
         const cmd = generateCommand(config.difficulty);
-        audioManager.commandFeedback();
-        set({ currentCommand: cmd });
+        issueCommand(cmd);
         scheduleAI();
         scheduleTurnTimer();
       }, 400);
