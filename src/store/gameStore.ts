@@ -30,6 +30,7 @@ import {
   pressUnoButton,
   resetButtonsForRound,
 } from '../engine/gameEngine';
+import { pickTriggerIndex } from '../engine/instantUnoTriggers';
 import { audioManager } from '../audio/audioManager';
 import { t, type TranslationKey } from '../i18n';
 
@@ -49,6 +50,10 @@ interface GameStore {
   roundWinner: PlayerIndex | null;
   gameWinner: PlayerIndex | null;
   statusMessage: string;
+  /** Index of the current round's instant UNO trigger word/sound (0-7) */
+  instantUnoTriggerIndex: number;
+  /** Whether the round-start announcement is showing */
+  showingTriggerAnnouncement: boolean;
 
   /* ── Actions ── */
   startGame: () => void;
@@ -57,6 +62,7 @@ interface GameStore {
   handleUnoPress: () => void;
   backToSetup: () => void;
   continueAfterRound: () => void;
+  dismissAnnouncement: () => void;
 
   /* Internal timer refs */
   _aiTimer: ReturnType<typeof setTimeout> | null;
@@ -94,6 +100,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         st.players,
         st.currentCommand,
         st.direction,
+        st.instantUnoTriggerIndex,
       );
 
       switch (action.type) {
@@ -153,15 +160,20 @@ export const useGameStore = create<GameStore>((set, get) => {
     audioManager.commandFeedback();
     set({ currentCommand: cmd });
     if (config.gameMode === 'audio') {
-      const spokenText = t(cmd.displayText as TranslationKey, config.language);
-      audioManager.speakCommand(spokenText, config.language);
+      if (cmd.type === 'instant_uno' && cmd.instantUnoDisplayIndex !== undefined) {
+        // Play the weird sound for the displayed trigger
+        audioManager.playInstantUnoTrigger(cmd.instantUnoDisplayIndex);
+      } else {
+        const spokenText = t(cmd.displayText as TranslationKey, config.language);
+        audioManager.speakCommand(spokenText, config.language);
+      }
     }
   }
 
   function nextTurn() {
-    const { config } = get();
+    const { config, instantUnoTriggerIndex } = get();
     setTimeout(() => {
-      const cmd = generateCommand(config.difficulty);
+      const cmd = generateCommand(config.difficulty, instantUnoTriggerIndex);
       issueCommand(cmd);
       scheduleAI();
       scheduleTurnTimer();
@@ -239,6 +251,8 @@ export const useGameStore = create<GameStore>((set, get) => {
     roundWinner: null,
     gameWinner: null,
     statusMessage: '',
+    instantUnoTriggerIndex: 0,
+    showingTriggerAnnouncement: false,
     _aiTimer: null,
     _turnTimer: null,
 
@@ -255,6 +269,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       const players = createPlayers(config.playerCount, config.fillWithAI);
       const reset = resetButtonsForRound(players);
       const firstActive = reset.findIndex((p) => p.type !== 'empty') as PlayerIndex;
+      const triggerIndex = pickTriggerIndex();
 
       set({
         players: reset,
@@ -267,14 +282,24 @@ export const useGameStore = create<GameStore>((set, get) => {
         direction: 'clockwise',
         statusMessage: '',
         currentCommand: null,
+        instantUnoTriggerIndex: triggerIndex,
+        showingTriggerAnnouncement: config.difficulty >= 4,
       });
 
-      setTimeout(() => {
-        const cmd = generateCommand(config.difficulty);
-        issueCommand(cmd);
-        scheduleAI();
-        scheduleTurnTimer();
-      }, 500);
+      // In audio mode, play the trigger sound once during announcement
+      if (config.difficulty >= 4 && config.gameMode === 'audio') {
+        setTimeout(() => audioManager.playInstantUnoTrigger(triggerIndex), 300);
+      }
+
+      // If no announcement needed (difficulty < 4), start immediately
+      if (config.difficulty < 4) {
+        setTimeout(() => {
+          const cmd = generateCommand(config.difficulty, triggerIndex);
+          issueCommand(cmd);
+          scheduleAI();
+          scheduleTurnTimer();
+        }, 500);
+      }
     },
 
     /* ── Handle button press ── */
@@ -322,7 +347,7 @@ export const useGameStore = create<GameStore>((set, get) => {
 
     /* ── Handle pass ── */
     handlePass: (dir: 'left' | 'right') => {
-      const { currentPlayer, players, currentCommand, direction, config, phase } =
+      const { currentPlayer, players, currentCommand, direction, config, phase, instantUnoTriggerIndex } =
         get();
       if (phase !== 'playing' || !currentCommand) return;
       if (players[currentPlayer].type === 'empty') return;
@@ -337,6 +362,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         currentCommand,
         direction,
         config.difficulty,
+        instantUnoTriggerIndex,
       );
 
       if (!result.valid) {
@@ -361,7 +387,7 @@ export const useGameStore = create<GameStore>((set, get) => {
 
     /* ── Handle UNO press ── */
     handleUnoPress: () => {
-      const { currentPlayer, players, currentCommand, direction, phase } = get();
+      const { currentPlayer, players, currentCommand, direction, phase, instantUnoTriggerIndex } = get();
       if (phase !== 'playing' || !currentCommand) return;
 
       clearTurnTimer();
@@ -372,6 +398,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         players,
         currentCommand,
         direction,
+        instantUnoTriggerIndex,
       );
 
       if (!result.valid) {
@@ -404,6 +431,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       const nextRoundNum = roundNumber + 1;
       const reset = resetButtonsForRound(players);
       const firstActive = reset.findIndex((p) => p.type !== 'empty') as PlayerIndex;
+      const triggerIndex = pickTriggerIndex();
 
       set({
         players: reset,
@@ -415,14 +443,24 @@ export const useGameStore = create<GameStore>((set, get) => {
         direction: 'clockwise',
         statusMessage: '',
         currentCommand: null,
+        instantUnoTriggerIndex: triggerIndex,
+        showingTriggerAnnouncement: config.difficulty >= 4,
       });
 
-      setTimeout(() => {
-        const cmd = generateCommand(config.difficulty);
-        issueCommand(cmd);
-        scheduleAI();
-        scheduleTurnTimer();
-      }, 400);
+      // In audio mode, play the trigger sound once during announcement
+      if (config.difficulty >= 4 && config.gameMode === 'audio') {
+        setTimeout(() => audioManager.playInstantUnoTrigger(triggerIndex), 300);
+      }
+
+      // If no announcement needed, start immediately
+      if (config.difficulty < 4) {
+        setTimeout(() => {
+          const cmd = generateCommand(config.difficulty, triggerIndex);
+          issueCommand(cmd);
+          scheduleAI();
+          scheduleTurnTimer();
+        }, 400);
+      }
     },
 
     /* ── Back to setup ── */
@@ -437,7 +475,20 @@ export const useGameStore = create<GameStore>((set, get) => {
         gameWinner: null,
         statusMessage: '',
         roundNumber: 1,
+        showingTriggerAnnouncement: false,
       });
+    },
+
+    /* ── Dismiss announcement and start play ── */
+    dismissAnnouncement: () => {
+      const { config, instantUnoTriggerIndex } = get();
+      set({ showingTriggerAnnouncement: false });
+      setTimeout(() => {
+        const cmd = generateCommand(config.difficulty, instantUnoTriggerIndex);
+        issueCommand(cmd);
+        scheduleAI();
+        scheduleTurnTimer();
+      }, 300);
     },
   };
 });

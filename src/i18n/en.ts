@@ -69,6 +69,12 @@ const en = {
   mode_audio: 'Audio',
   mode_text_desc: 'Commands shown as text',
   mode_audio_desc: 'Commands spoken aloud',
+
+  // Instant UNO triggers
+  trigger_listen: 'Listen for this sound!',
+  trigger_remember: 'Remember: "{word}"',
+  trigger_play_again: 'Play Again',
+  trigger_got_it: 'GOT IT!',
 };
 
 export default en;

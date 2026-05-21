@@ -69,6 +69,12 @@ const de = {
   mode_audio: 'Audio',
   mode_text_desc: 'Befehle als Text angezeigt',
   mode_audio_desc: 'Befehle werden vorgelesen',
+
+  // Instant UNO triggers
+  trigger_listen: 'Hör auf dieses Geräusch!',
+  trigger_remember: 'Merke dir: "{word}"',
+  trigger_play_again: 'Nochmal abspielen',
+  trigger_got_it: 'VERSTANDEN!',
 };
 
 export default de;

@@ -32,6 +32,8 @@ export interface Command {
   targetButton?: ButtonNumber;
   /** Display text for the command */
   displayText: string;
+  /** For instant_uno: index into the trigger word/sound pool that is displayed */
+  instantUnoDisplayIndex?: number;
 }
 
 export type GamePhase = 'setup' | 'playing' | 'round_over' | 'game_over';
