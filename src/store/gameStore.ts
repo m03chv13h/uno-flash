@@ -409,13 +409,9 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       if (!result.valid) {
         audioManager.invalidMove();
-        if (get().config.difficulty >= 2) {
-          const penalized = applyPenalty(players, currentPlayer);
-          set({ players: penalized, statusMessage: 'UNO button only for Instant UNO! Penalty!' });
-          advanceToNextPlayerSameCommand();
-        } else {
-          set({ statusMessage: 'UNO button only for Instant UNO!' });
-        }
+        const penalized = applyPenalty(players, currentPlayer);
+        set({ players: penalized, statusMessage: 'UNO button only for Instant UNO! Penalty!' });
+        advanceToNextPlayerSameCommand();
         return;
       }
 

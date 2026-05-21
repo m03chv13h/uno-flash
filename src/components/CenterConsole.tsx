@@ -19,7 +19,8 @@ export default function CenterConsole() {
   const isDecoy = isInstantUno &&
     currentCommand?.instantUnoDisplayIndex !== undefined &&
     currentCommand.instantUnoDisplayIndex !== instantUnoTriggerIndex;
-  const unoDisabled = phase !== 'playing' || !isInstantUno || isDecoy;
+  // UNO button is always clickable during gameplay; incorrect presses count as failure
+  const unoDisabled = phase !== 'playing';
 
   const rotation = useGameStore((s) => s.consoleRotation);
   const isLandscape = currentPlayer === 1 || currentPlayer === 3;
