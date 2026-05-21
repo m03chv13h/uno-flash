@@ -39,21 +39,21 @@ export interface SoundDef {
 
 export const INSTANT_UNO_SOUNDS: SoundDef[] = [
   // 0: High chirp
-  { freqs: [1200, 1500], duration: 0.2, type: 'sine', gain: 0.15 },
+  { freqs: [1200, 1500], duration: 2.0, type: 'sine', gain: 0.15 },
   // 1: Low buzz
-  { freqs: [110, 138], duration: 0.4, type: 'sawtooth', gain: 0.12 },
+  { freqs: [110, 138], duration: 2.0, type: 'sawtooth', gain: 0.12 },
   // 2: Alien warble
-  { freqs: [600, 900, 1100], duration: 0.3, type: 'triangle', gain: 0.13 },
+  { freqs: [600, 900, 1100], duration: 2.0, type: 'triangle', gain: 0.13 },
   // 3: Robot beep
-  { freqs: [440, 880], duration: 0.15, type: 'square', gain: 0.1 },
+  { freqs: [440, 880], duration: 2.0, type: 'square', gain: 0.1 },
   // 4: Foghorn
-  { freqs: [85, 170], duration: 0.5, type: 'sawtooth', gain: 0.14 },
+  { freqs: [85, 170], duration: 2.0, type: 'sawtooth', gain: 0.14 },
   // 5: Sparkle
-  { freqs: [1047, 1319, 1568], duration: 0.25, type: 'sine', gain: 0.12 },
+  { freqs: [1047, 1319, 1568], duration: 2.0, type: 'sine', gain: 0.12 },
   // 6: Duck quack
-  { freqs: [300, 350], duration: 0.12, type: 'square', gain: 0.13 },
+  { freqs: [300, 350], duration: 2.0, type: 'square', gain: 0.13 },
   // 7: Space blip
-  { freqs: [2000, 2400, 1600], duration: 0.18, type: 'triangle', gain: 0.11 },
+  { freqs: [2000, 2400, 1600], duration: 2.0, type: 'triangle', gain: 0.11 },
 ];
 
 /** Pick a random trigger index (0-7) */
