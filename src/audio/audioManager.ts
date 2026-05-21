@@ -12,6 +12,12 @@
 let audioCtx: AudioContext | null = null;
 let _enabled = true;
 
+const SPEECH_LANG_MAP: Record<string, string> = {
+  en: 'en-US',
+  de: 'de-DE',
+  fr: 'fr-FR',
+};
+
 function getCtx(): AudioContext {
   if (!audioCtx) {
     audioCtx = new AudioContext();
@@ -113,14 +119,9 @@ export const audioManager = {
   speakCommand(text: string, lang: string) {
     if (!_enabled) return;
     try {
-      const langMap: Record<string, string> = {
-        en: 'en-US',
-        de: 'de-DE',
-        fr: 'fr-FR',
-      };
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = langMap[lang] || 'en-US';
+      utterance.lang = SPEECH_LANG_MAP[lang] || 'en-US';
       utterance.rate = 1.1;
       utterance.volume = 1;
       window.speechSynthesis.speak(utterance);
