@@ -71,7 +71,7 @@ The workflow also supports `workflow_dispatch` for manual triggers from the Acti
 
 ### Base Path
 
-The Vite config uses `base: '/uno-flash/'` for GitHub Pages. If your repository has a different name, update the `base` property in `vite.config.ts`.
+The Vite config uses `base: '/uno-flash/'` by default for GitHub Pages. You can override it with the `VITE_BASE_PATH` environment variable (e.g. `VITE_BASE_PATH=/` for root-hosted deployments).
 
 ### Accessing the app on both URLs
 
@@ -81,10 +81,16 @@ The app is reachable at the default GitHub Pages URL **without any redirect**:
 
 To *also* serve it from a custom subdomain (e.g. `uno-flash.blunzinger.com`), **do not** add a `public/CNAME` file to this repository. GitHub Pages' built-in custom-domain feature automatically redirects the `github.io` URL to the custom domain, which prevents both URLs from working independently.
 
-Instead, use one of the following approaches so the subdomain serves the app without affecting the `github.io` URL:
+Instead, deploy to **Cloudflare Pages** so the subdomain serves the app independently:
 
-- **DNS-level redirect** — Add a redirect rule in your DNS provider (or Cloudflare) that issues a `301`/`302` from `uno-flash.blunzinger.com` → `https://m03chv13h.github.io/uno-flash/`.
-- **Separate deployment** — Deploy the same source to [Cloudflare Pages](https://pages.cloudflare.com/) or [Netlify](https://netlify.com/) connected to this repository, set `base: '/'` in that deployment's build environment, and point the subdomain there.
+1. In [Cloudflare Dashboard → Pages](https://dash.cloudflare.com/), create a new project connected to this repository
+2. Set build command: `npm run build`
+3. Set build output directory: `dist`
+4. Add environment variable: `VITE_BASE_PATH` = `/`
+5. Under **Custom domains**, add `uno-flash.blunzinger.com`
+6. In Cloudflare DNS, the CNAME for `uno-flash` should point to your `<project>.pages.dev` domain (Cloudflare Pages sets this up automatically)
+
+This gives you two independent deployments — GitHub Pages at `m03chv13h.github.io/uno-flash/` and Cloudflare Pages at `uno-flash.blunzinger.com` — with no redirects between them.
 
 ## Customization
 
