@@ -64,10 +64,10 @@ export const BUTTON_NUMBERS: ButtonNumber[] = [1, 2, 3, 4];
 export const PLAYER_INDICES: PlayerIndex[] = [0, 1, 2, 3];
 export const ROUNDS_TO_WIN = 4;
 
-/** Turn order positions around the table: top, right, bottom, left */
+/** Turn order positions around the table: bottom, right, top, left */
 export const PLAYER_ROTATIONS: Record<PlayerIndex, number> = {
-  0: 180,
+  0: 0,
   1: 270,
-  2: 0,
+  2: 180,
   3: 90,
 };
