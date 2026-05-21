@@ -62,6 +62,13 @@ const fr = {
   diff_2: 'Normal — Pénalités activées',
   diff_3: 'Difficile — Rythme rapide',
   diff_4: 'Expert — UNO instantané',
+
+  // Game mode
+  game_mode: 'Mode de jeu',
+  mode_text: 'Texte',
+  mode_audio: 'Audio',
+  mode_text_desc: 'Commandes affichées en texte',
+  mode_audio_desc: 'Commandes énoncées à voix haute',
 };
 
 export default fr;

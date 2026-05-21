@@ -62,6 +62,13 @@ const en = {
   diff_2: 'Normal — Penalties on',
   diff_3: 'Hard — Fast pace',
   diff_4: 'Expert — Instant UNO',
+
+  // Game mode
+  game_mode: 'Game Mode',
+  mode_text: 'Text',
+  mode_audio: 'Audio',
+  mode_text_desc: 'Commands shown as text',
+  mode_audio_desc: 'Commands spoken aloud',
 };
 
 export default en;

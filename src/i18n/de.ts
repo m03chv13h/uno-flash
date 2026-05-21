@@ -62,6 +62,13 @@ const de = {
   diff_2: 'Normal — Strafen aktiv',
   diff_3: 'Schwer — Schnelles Tempo',
   diff_4: 'Experte — Sofort UNO',
+
+  // Game mode
+  game_mode: 'Spielmodus',
+  mode_text: 'Text',
+  mode_audio: 'Audio',
+  mode_text_desc: 'Befehle als Text angezeigt',
+  mode_audio_desc: 'Befehle werden vorgelesen',
 };
 
 export default de;
