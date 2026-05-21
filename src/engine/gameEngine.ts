@@ -91,9 +91,9 @@ export function getPassTarget(
   players: PlayerState[],
 ): PlayerIndex {
   // From the current player's perspective (accounting for board rotation):
-  // "pass left" = clockwise, "pass right" = counterclockwise
+  // "pass left" = counterclockwise, "pass right" = clockwise
   const dir: Direction =
-    passDirection === 'left' ? 'clockwise' : 'counterclockwise';
+    passDirection === 'left' ? 'counterclockwise' : 'clockwise';
   return getNextActivePlayer(current, dir, players);
 }
 
@@ -259,10 +259,11 @@ export function passAction(
   // Determine expected direction:
   // For reverse commands, the player presses the direction they're changing TO.
   // For everything else, the player follows the current play direction.
+  // From the player's perspective: clockwise = right, counterclockwise = left.
   const expectedDir: 'left' | 'right' =
     command.type === 'reverse'
-      ? (direction === 'clockwise' ? 'right' : 'left')
-      : (direction === 'clockwise' ? 'left' : 'right');
+      ? (direction === 'clockwise' ? 'left' : 'right')
+      : (direction === 'clockwise' ? 'right' : 'left');
 
   // Draw allows passing in either direction (player chooses target)
   if (command.type !== 'draw' && passDir !== expectedDir) {
@@ -505,7 +506,7 @@ export function decideAIAction(
     if (isDecoy) {
       // Should pass — AI has 80% chance to correctly identify decoy
       if (Math.random() < 0.8) {
-        return { type: 'pass', passDir: direction === 'clockwise' ? 'left' : 'right' };
+        return { type: 'pass', passDir: direction === 'clockwise' ? 'right' : 'left' };
       }
       // Mistake: press UNO on decoy
       return { type: 'uno' };
@@ -516,7 +517,7 @@ export function decideAIAction(
       return { type: 'uno' };
     }
     // Fail to react — pass (which is invalid, but the game handles it)
-    return { type: 'pass', passDir: direction === 'clockwise' ? 'left' : 'right' };
+    return { type: 'pass', passDir: direction === 'clockwise' ? 'right' : 'left' };
   }
 
   // Wild: press a lit button if available
@@ -525,7 +526,7 @@ export function decideAIAction(
     if (litIdx !== -1) {
       return { type: 'button', buttonNum: (litIdx + 1) as ButtonNumber };
     }
-    return { type: 'pass', passDir: direction === 'clockwise' ? 'left' : 'right' };
+    return { type: 'pass', passDir: direction === 'clockwise' ? 'right' : 'left' };
   }
 
   // Color command: press the button if lit, otherwise pass
@@ -536,7 +537,7 @@ export function decideAIAction(
     }
     return {
       type: 'pass',
-      passDir: direction === 'clockwise' ? 'left' : 'right',
+      passDir: direction === 'clockwise' ? 'right' : 'left',
     };
   }
 
@@ -544,7 +545,7 @@ export function decideAIAction(
   if (command.type === 'skip') {
     return {
       type: 'pass',
-      passDir: direction === 'clockwise' ? 'left' : 'right',
+      passDir: direction === 'clockwise' ? 'right' : 'left',
     };
   }
 
@@ -560,9 +561,9 @@ export function decideAIAction(
   if (command.type === 'reverse') {
     return {
       type: 'pass',
-      passDir: direction === 'clockwise' ? 'right' : 'left',
+      passDir: direction === 'clockwise' ? 'left' : 'right',
     };
   }
 
-  return { type: 'pass', passDir: direction === 'clockwise' ? 'left' : 'right' };
+  return { type: 'pass', passDir: direction === 'clockwise' ? 'right' : 'left' };
 }
