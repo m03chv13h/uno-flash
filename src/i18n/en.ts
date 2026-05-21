@@ -75,6 +75,16 @@ const en = {
   trigger_remember: 'Remember: "{word}"',
   trigger_play_again: 'Play Again',
   trigger_got_it: 'GOT IT!',
+
+  // Instant UNO trigger words
+  uno_word_0: 'BANANA',
+  uno_word_1: 'WOMBAT',
+  uno_word_2: 'NOODLE',
+  uno_word_3: 'PICKLE',
+  uno_word_4: 'KAZOO',
+  uno_word_5: 'WOBBLE',
+  uno_word_6: 'SPLONK',
+  uno_word_7: 'FLUMPY',
 };
 
 export default en;

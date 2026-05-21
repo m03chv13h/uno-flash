@@ -1,7 +1,6 @@
 import { useGameStore } from '../store/gameStore';
-import { t } from '../i18n';
+import { t, getInstantUnoWords } from '../i18n';
 import { audioManager } from '../audio/audioManager';
-import { INSTANT_UNO_WORDS } from '../engine/instantUnoTriggers';
 import PlayerStation from './PlayerStation';
 import CenterConsole from './CenterConsole';
 import '../styles/GameScreen.css';
@@ -71,7 +70,7 @@ export default function GameScreen() {
           <div className="overlay-message">
             {config.gameMode === 'audio'
               ? `🔊 ${t('trigger_listen', lang)}`
-              : t('trigger_remember', lang, { word: INSTANT_UNO_WORDS[instantUnoTriggerIndex] })}
+              : t('trigger_remember', lang, { word: getInstantUnoWords(lang)[instantUnoTriggerIndex] })}
           </div>
           {config.gameMode === 'audio' && (
             <button
