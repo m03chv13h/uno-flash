@@ -9,6 +9,8 @@
    3. Replace the play* methods below
    ──────────────────────────────────────────── */
 
+import { INSTANT_UNO_SOUNDS } from '../engine/instantUnoTriggers';
+
 let audioCtx: AudioContext | null = null;
 let _enabled = true;
 
@@ -100,6 +102,18 @@ export const audioManager = {
 
   instantUno() {
     playChord([440, 554, 659], 0.4, 'triangle', 0.15);
+  },
+
+  /** Play one of the 8 weird instant UNO trigger sounds by index */
+  playInstantUnoTrigger(index: number) {
+    if (!_enabled) return;
+    const sound = INSTANT_UNO_SOUNDS[index];
+    if (!sound) return;
+    if (sound.freqs.length === 1) {
+      playTone(sound.freqs[0], sound.duration, sound.type, sound.gain);
+    } else {
+      playChord(sound.freqs, sound.duration, sound.type, sound.gain);
+    }
   },
 
   commandFeedback() {

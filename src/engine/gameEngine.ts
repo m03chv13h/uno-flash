@@ -17,6 +17,7 @@ import {
   PLAYER_INDICES,
   ROUNDS_TO_WIN,
 } from '../types/game';
+import { pickDisplayIndex } from './instantUnoTriggers';
 
 /* ─── Helpers ─────────────────────────────── */
 
@@ -101,7 +102,7 @@ export function getPassTarget(
 const COLOR_COMMANDS: CommandType[] = ['color'];
 const SPECIAL_COMMANDS: CommandType[] = ['skip', 'reverse', 'draw', 'wild'];
 
-export function generateCommand(difficulty: Difficulty): Command {
+export function generateCommand(difficulty: Difficulty, instantUnoTriggerIndex?: number): Command {
   // Instant UNO only at difficulty 4
   const pool: CommandType[] = [...COLOR_COMMANDS, ...SPECIAL_COMMANDS];
   if (difficulty >= 4) pool.push('instant_uno');
@@ -137,8 +138,15 @@ export function generateCommand(difficulty: Difficulty): Command {
       return { type: 'draw', displayText: 'cmd_draw' };
     case 'wild':
       return { type: 'wild', displayText: 'cmd_wild' };
-    case 'instant_uno':
-      return { type: 'instant_uno', displayText: 'cmd_instant_uno' };
+    case 'instant_uno': {
+      const triggerIdx = instantUnoTriggerIndex ?? 0;
+      const displayIdx = pickDisplayIndex(triggerIdx, difficulty);
+      return {
+        type: 'instant_uno',
+        displayText: 'cmd_instant_uno',
+        instantUnoDisplayIndex: displayIdx,
+      };
+    }
     default:
       return { type: 'color', targetButton: 1, displayText: 'cmd_red' };
   }
@@ -244,6 +252,7 @@ export function passAction(
   command: Command,
   direction: Direction,
   difficulty: Difficulty,
+  instantUnoTriggerIndex?: number,
 ): MoveResult {
   const penaltiesEnabled = difficulty >= 2;
 
@@ -360,7 +369,19 @@ export function passAction(
     }
 
     case 'instant_uno':
-      // Pass is not valid during Instant UNO — must press the UNO button
+      // Pass is valid if a decoy word is displayed (not the trigger)
+      if (instantUnoTriggerIndex !== undefined && command.instantUnoDisplayIndex !== undefined) {
+        if (command.instantUnoDisplayIndex !== instantUnoTriggerIndex) {
+          // Decoy — passing is the correct action
+          return {
+            valid: true,
+            players,
+            direction,
+            nextPlayer: getNextActivePlayer(currentPlayer, direction, players),
+          };
+        }
+      }
+      // Real trigger — must press the UNO button, not pass
       return { valid: false, players, direction, nextPlayer: currentPlayer };
 
     default:
@@ -370,15 +391,25 @@ export function passAction(
 
 /**
  * Handle the UNO button press (Instant UNO).
+ * In hard mode, the displayed word may not match the trigger — pressing UNO on a decoy is invalid.
  */
 export function pressUnoButton(
   currentPlayer: PlayerIndex,
   players: PlayerState[],
   command: Command,
   direction: Direction,
+  instantUnoTriggerIndex?: number,
 ): MoveResult {
   if (command.type !== 'instant_uno') {
     return { valid: false, players, direction, nextPlayer: currentPlayer };
+  }
+
+  // If trigger index is set, verify the displayed word matches
+  if (instantUnoTriggerIndex !== undefined && command.instantUnoDisplayIndex !== undefined) {
+    if (command.instantUnoDisplayIndex !== instantUnoTriggerIndex) {
+      // Decoy! Pressing UNO is wrong
+      return { valid: false, players, direction, nextPlayer: currentPlayer };
+    }
   }
 
   const player = players[currentPlayer];
@@ -460,12 +491,27 @@ export function decideAIAction(
   players: PlayerState[],
   command: Command,
   direction: Direction,
+  instantUnoTriggerIndex?: number,
 ): AIAction {
   const player = players[currentPlayer];
 
   // Instant UNO
   if (command.type === 'instant_uno') {
-    // AI has a 75% chance to react correctly
+    // Check if it's a decoy (hard mode)
+    const isDecoy = instantUnoTriggerIndex !== undefined &&
+      command.instantUnoDisplayIndex !== undefined &&
+      command.instantUnoDisplayIndex !== instantUnoTriggerIndex;
+
+    if (isDecoy) {
+      // Should pass — AI has 80% chance to correctly identify decoy
+      if (Math.random() < 0.8) {
+        return { type: 'pass', passDir: direction === 'clockwise' ? 'left' : 'right' };
+      }
+      // Mistake: press UNO on decoy
+      return { type: 'uno' };
+    }
+
+    // Real trigger — AI has a 75% chance to react correctly
     if (Math.random() < 0.75) {
       return { type: 'uno' };
     }

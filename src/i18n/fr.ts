@@ -69,6 +69,12 @@ const fr = {
   mode_audio: 'Audio',
   mode_text_desc: 'Commandes affichées en texte',
   mode_audio_desc: 'Commandes énoncées à voix haute',
+
+  // Instant UNO triggers
+  trigger_listen: 'Écoutez ce son !',
+  trigger_remember: 'Rappelez-vous : "{word}"',
+  trigger_play_again: 'Rejouer',
+  trigger_got_it: 'COMPRIS !',
 };
 
 export default fr;

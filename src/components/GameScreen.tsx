@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import { t } from '../i18n';
 import { audioManager } from '../audio/audioManager';
+import { INSTANT_UNO_WORDS } from '../engine/instantUnoTriggers';
 import PlayerStation from './PlayerStation';
 import CenterConsole from './CenterConsole';
 import '../styles/GameScreen.css';
@@ -14,6 +15,9 @@ export default function GameScreen() {
   const gameWinner = useGameStore((s) => s.gameWinner);
   const backToSetup = useGameStore((s) => s.backToSetup);
   const continueAfterRound = useGameStore((s) => s.continueAfterRound);
+  const dismissAnnouncement = useGameStore((s) => s.dismissAnnouncement);
+  const showingTriggerAnnouncement = useGameStore((s) => s.showingTriggerAnnouncement);
+  const instantUnoTriggerIndex = useGameStore((s) => s.instantUnoTriggerIndex);
   const config = useGameStore((s) => s.config);
   const setConfig = useGameStore((s) => s.setConfig);
   const lang = config.language;
@@ -58,6 +62,29 @@ export default function GameScreen() {
       {/* Status message */}
       {statusMessage && (
         <div className="game-status">{statusMessage}</div>
+      )}
+
+      {/* Trigger announcement overlay (before round starts in hard mode) */}
+      {showingTriggerAnnouncement && (
+        <div className="overlay">
+          <div className="overlay-title">{t('instant_uno', lang)}</div>
+          <div className="overlay-message">
+            {config.gameMode === 'audio'
+              ? '🔊 Listen for this sound!'
+              : `Remember: "${INSTANT_UNO_WORDS[instantUnoTriggerIndex]}"`}
+          </div>
+          {config.gameMode === 'audio' && (
+            <button
+              className="overlay-btn secondary"
+              onClick={() => audioManager.playInstantUnoTrigger(instantUnoTriggerIndex)}
+            >
+              🔊 Play Again
+            </button>
+          )}
+          <button className="overlay-btn" onClick={dismissAnnouncement}>
+            GOT IT!
+          </button>
+        </div>
       )}
 
       {/* Round-over overlay */}
