@@ -43,7 +43,7 @@ export default function GameScreen() {
         </button>
       </div>
 
-      {/* Player stations in order: 0=top, 1=right, 2=bottom, 3=left */}
+      {/* Player stations in order: 0=bottom, 1=right, 2=top, 3=left */}
       {players.map((p) => (
         <PlayerStation
           key={p.index}
