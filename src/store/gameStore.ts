@@ -146,6 +146,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       set({ currentPlayer: next, consoleRotation: smoothRotation(next) });
       // Re-schedule AI or turn timer for the new player without generating a new command
       setTimeout(() => {
+        repeatCommand();
         scheduleAI();
         scheduleTurnTimer();
       }, 400);
@@ -187,9 +188,22 @@ export const useGameStore = create<GameStore>((set, get) => {
     set({ currentPlayer: next, consoleRotation: smoothRotation(next) });
     // Re-schedule AI or turn timer for the new player without generating a new command
     setTimeout(() => {
+      repeatCommand();
       scheduleAI();
       scheduleTurnTimer();
     }, 400);
+  }
+
+  /** Re-speak the current command so the player knows what to do after a mistake. */
+  function repeatCommand() {
+    const { currentCommand, config } = get();
+    if (!currentCommand || config.gameMode !== 'audio') return;
+    if (currentCommand.type === 'instant_uno' && currentCommand.instantUnoDisplayIndex !== undefined) {
+      audioManager.playInstantUnoTrigger(currentCommand.instantUnoDisplayIndex);
+    } else {
+      const spokenText = t(currentCommand.displayText as TranslationKey, config.language);
+      audioManager.speakCommand(spokenText, config.language);
+    }
   }
 
   function handleRoundWin(winner: PlayerIndex) {
@@ -322,12 +336,17 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       if (!result.valid) {
         audioManager.invalidMove();
+        const cmdText = t(currentCommand.displayText as TranslationKey, config.language);
         if (config.difficulty >= 2) {
           const penalized = applyPenalty(players, currentPlayer);
-          set({ players: penalized, statusMessage: 'Invalid move! Penalty!' });
+          set({ players: penalized, statusMessage: t('invalid_move_penalty', config.language, { command: cmdText }) });
           advanceToNextPlayerSameCommand();
         } else {
-          set({ statusMessage: 'Invalid move!' });
+          set({ statusMessage: t('invalid_move_try_again', config.language, { command: cmdText }) });
+          setTimeout(() => {
+            repeatCommand();
+            scheduleTurnTimer();
+          }, 600);
         }
         return;
       }
@@ -370,12 +389,17 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       if (!result.valid) {
         audioManager.invalidMove();
+        const cmdText = t(currentCommand.displayText as TranslationKey, config.language);
         if (config.difficulty >= 2) {
           const penalized = applyPenalty(players, currentPlayer);
-          set({ players: penalized, statusMessage: result.message ?? 'Invalid move! Penalty!' });
+          set({ players: penalized, statusMessage: t('invalid_move_penalty', config.language, { command: cmdText }) });
           advanceToNextPlayerSameCommand();
         } else {
-          set({ statusMessage: result.message ?? 'Invalid move!' });
+          set({ statusMessage: t('invalid_move_try_again', config.language, { command: cmdText }) });
+          setTimeout(() => {
+            repeatCommand();
+            scheduleTurnTimer();
+          }, 600);
         }
         return;
       }
@@ -409,8 +433,10 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       if (!result.valid) {
         audioManager.invalidMove();
+        const { config } = get();
+        const cmdText = t(currentCommand.displayText as TranslationKey, config.language);
         const penalized = applyPenalty(players, currentPlayer);
-        set({ players: penalized, statusMessage: 'UNO button only for Instant UNO! Penalty!' });
+        set({ players: penalized, statusMessage: t('invalid_move_penalty', config.language, { command: cmdText }) });
         advanceToNextPlayerSameCommand();
         return;
       }
