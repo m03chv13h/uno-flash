@@ -54,6 +54,10 @@ const de = {
   continue_btn: 'WEITER',
   back_to_menu: 'ZURÜCK ZUM MENÜ',
 
+  // Errors
+  invalid_move_try_again: 'Falscher Zug! Nochmal: {command}',
+  invalid_move_penalty: 'Falscher Zug! Strafe! Nächstes: {command}',
+
   // Timer
   too_slow: 'Zu langsam! Strafe!',
 

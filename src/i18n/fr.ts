@@ -54,6 +54,10 @@ const fr = {
   continue_btn: 'CONTINUER',
   back_to_menu: 'RETOUR AU MENU',
 
+  // Errors
+  invalid_move_try_again: 'Coup invalide ! Réessayez : {command}',
+  invalid_move_penalty: 'Coup invalide ! Pénalité ! Suivant : {command}',
+
   // Timer
   too_slow: 'Trop lent ! Pénalité !',
 

@@ -54,6 +54,10 @@ const en = {
   continue_btn: 'CONTINUE',
   back_to_menu: 'BACK TO MENU',
 
+  // Errors
+  invalid_move_try_again: 'Invalid move! Try again: {command}',
+  invalid_move_penalty: 'Invalid move! Penalty! Next: {command}',
+
   // Timer
   too_slow: 'Too slow! Penalty!',
 
