@@ -73,6 +73,19 @@ The workflow also supports `workflow_dispatch` for manual triggers from the Acti
 
 The Vite config uses `base: '/uno-flash/'` for GitHub Pages. If your repository has a different name, update the `base` property in `vite.config.ts`.
 
+### Accessing the app on both URLs
+
+The app is reachable at the default GitHub Pages URL **without any redirect**:
+
+> https://m03chv13h.github.io/uno-flash/
+
+To *also* serve it from a custom subdomain (e.g. `uno-flash.blunzinger.com`), **do not** add a `public/CNAME` file to this repository. GitHub Pages' built-in custom-domain feature automatically redirects the `github.io` URL to the custom domain, which prevents both URLs from working independently.
+
+Instead, use one of the following approaches so the subdomain serves the app without affecting the `github.io` URL:
+
+- **DNS-level redirect** — Add a redirect rule in your DNS provider (or Cloudflare) that issues a `301`/`302` from `uno-flash.blunzinger.com` → `https://m03chv13h.github.io/uno-flash/`.
+- **Separate deployment** — Deploy the same source to [Cloudflare Pages](https://pages.cloudflare.com/) or [Netlify](https://netlify.com/) connected to this repository, set `base: '/'` in that deployment's build environment, and point the subdomain there.
+
 ## Customization
 
 ### Replacing Sounds
