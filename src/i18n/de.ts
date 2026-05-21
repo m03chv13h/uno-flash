@@ -43,7 +43,7 @@ const de = {
   cmd_skip: 'AUSSETZEN',
   cmd_reverse: 'UMKEHREN',
   cmd_draw: 'ZIEHEN',
-  cmd_wild: 'WILD',
+  cmd_wild: 'FARBENWAHL',
   cmd_instant_uno: 'SOFORT UNO!',
 
   // Overlays
