@@ -75,6 +75,16 @@ const fr = {
   trigger_remember: 'Rappelez-vous : "{word}"',
   trigger_play_again: 'Rejouer',
   trigger_got_it: 'COMPRIS !',
+
+  // Instant UNO trigger words
+  uno_word_0: 'BANANE',
+  uno_word_1: 'WOMBAT',
+  uno_word_2: 'NOUILLE',
+  uno_word_3: 'CORNICHON',
+  uno_word_4: 'KAZOU',
+  uno_word_5: 'VACILLER',
+  uno_word_6: 'SPLONK',
+  uno_word_7: 'PATATRA',
 };
 
 export default fr;

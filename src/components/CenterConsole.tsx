@@ -1,7 +1,6 @@
 import { useGameStore } from '../store/gameStore';
-import { t, type TranslationKey } from '../i18n';
+import { t, getInstantUnoWords, type TranslationKey } from '../i18n';
 import { ROUNDS_TO_WIN } from '../types/game';
-import { INSTANT_UNO_WORDS } from '../engine/instantUnoTriggers';
 
 export default function CenterConsole() {
   const currentCommand = useGameStore((s) => s.currentCommand);
@@ -33,7 +32,7 @@ export default function CenterConsole() {
       if (config.gameMode === 'audio') {
         commandDisplayText = '🔊';
       } else {
-        commandDisplayText = INSTANT_UNO_WORDS[currentCommand.instantUnoDisplayIndex];
+        commandDisplayText = getInstantUnoWords(lang)[currentCommand.instantUnoDisplayIndex];
       }
     } else if (config.gameMode === 'audio') {
       commandDisplayText = '🔊';
