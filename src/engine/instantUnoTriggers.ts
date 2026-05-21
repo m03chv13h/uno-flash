@@ -38,22 +38,22 @@ export interface SoundDef {
 }
 
 export const INSTANT_UNO_SOUNDS: SoundDef[] = [
-  // 0: High chirp
-  { freqs: [1200, 1500], duration: 2.0, type: 'sine', gain: 0.15 },
-  // 1: Low buzz
-  { freqs: [110, 138], duration: 2.0, type: 'sawtooth', gain: 0.12 },
-  // 2: Alien warble
-  { freqs: [600, 900, 1100], duration: 2.0, type: 'triangle', gain: 0.13 },
-  // 3: Robot beep
-  { freqs: [440, 880], duration: 2.0, type: 'square', gain: 0.1 },
-  // 4: Foghorn
-  { freqs: [85, 170], duration: 2.0, type: 'sawtooth', gain: 0.14 },
-  // 5: Sparkle
-  { freqs: [1047, 1319, 1568], duration: 2.0, type: 'sine', gain: 0.12 },
-  // 6: Duck quack
-  { freqs: [300, 350], duration: 2.0, type: 'square', gain: 0.13 },
-  // 7: Space blip
-  { freqs: [2000, 2400, 1600], duration: 2.0, type: 'triangle', gain: 0.11 },
+  // 0: Demonic hiccup — dissonant tritone with sub-bass rumble
+  { freqs: [66, 93, 666], duration: 2.0, type: 'sawtooth', gain: 0.14 },
+  // 1: Bee trapped in a jar — tight cluster of clashing frequencies
+  { freqs: [248, 251, 253, 259], duration: 2.0, type: 'square', gain: 0.1 },
+  // 2: Underwater whale fax machine
+  { freqs: [55, 1760, 2093], duration: 2.0, type: 'triangle', gain: 0.13 },
+  // 3: Broken music box — dissonant minor 2nd cluster high up
+  { freqs: [1975, 2093, 2217], duration: 2.0, type: 'sine', gain: 0.11 },
+  // 4: Eldritch gong — extreme low with inharmonic overtones
+  { freqs: [36, 97, 113, 271], duration: 2.0, type: 'sawtooth', gain: 0.13 },
+  // 5: Glitchy kazoo seizure — wide dissonant spread
+  { freqs: [147, 1480, 1511, 73], duration: 2.0, type: 'square', gain: 0.09 },
+  // 6: Interdimensional doorbell — tritone stack
+  { freqs: [370, 523, 740, 1046], duration: 2.0, type: 'triangle', gain: 0.12 },
+  // 7: Possessed dial-up modem — harsh high cluster
+  { freqs: [2637, 2794, 1397, 350], duration: 2.0, type: 'sawtooth', gain: 0.1 },
 ];
 
 /** Pick a random trigger index (0-7) */
