@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: uno-flash
+    runtime: static
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_BASE_PATH
+        value: /

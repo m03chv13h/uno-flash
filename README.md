@@ -92,6 +92,19 @@ Instead, deploy to **Cloudflare Pages** so the subdomain serves the app independ
 
 This gives you two independent deployments — GitHub Pages at `m03chv13h.github.io/uno-flash/` and Cloudflare Pages at `uno-flash.blunzinger.com` — with no redirects between them.
 
+## Render Deployment
+
+The project includes a `render.yaml` blueprint for one-click deployment to [Render](https://render.com) on the free plan.
+
+### Deploy to Render
+
+1. Click **New → Blueprint** in the [Render Dashboard](https://dashboard.render.com/)
+2. Connect this repository
+3. Render will detect `render.yaml` and configure a free static site automatically
+4. The site builds with `npm install && npm run build` and serves the `dist` directory
+
+The blueprint sets `VITE_BASE_PATH=/` so the app is served at the root URL.
+
 ## Customization
 
 ### Replacing Sounds
