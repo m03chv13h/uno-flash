@@ -134,7 +134,7 @@ export const audioManager = {
     if (!_enabled) return;
     try {
       window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
+      const utterance = new SpeechSynthesisUtterance(text.toLowerCase());
       utterance.lang = SPEECH_LANG_MAP[lang] || 'en-US';
       utterance.rate = 1.1;
       utterance.volume = 1;
