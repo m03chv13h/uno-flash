@@ -70,19 +70,19 @@ export default function GameScreen() {
           <div className="overlay-title">{t('instant_uno', lang)}</div>
           <div className="overlay-message">
             {config.gameMode === 'audio'
-              ? '🔊 Listen for this sound!'
-              : `Remember: "${INSTANT_UNO_WORDS[instantUnoTriggerIndex]}"`}
+              ? `🔊 ${t('trigger_listen', lang)}`
+              : t('trigger_remember', lang, { word: INSTANT_UNO_WORDS[instantUnoTriggerIndex] })}
           </div>
           {config.gameMode === 'audio' && (
             <button
               className="overlay-btn secondary"
               onClick={() => audioManager.playInstantUnoTrigger(instantUnoTriggerIndex)}
             >
-              🔊 Play Again
+              🔊 {t('trigger_play_again', lang)}
             </button>
           )}
           <button className="overlay-btn" onClick={dismissAnnouncement}>
-            GOT IT!
+            {t('trigger_got_it', lang)}
           </button>
         </div>
       )}
