@@ -79,6 +79,16 @@ const de = {
   trigger_remember: 'Merke dir: "{word}"',
   trigger_play_again: 'Nochmal abspielen',
   trigger_got_it: 'VERSTANDEN!',
+
+  // Instant UNO trigger words
+  uno_word_0: 'BANANE',
+  uno_word_1: 'WOMBAT',
+  uno_word_2: 'NUDEL',
+  uno_word_3: 'GURKE',
+  uno_word_4: 'KAZOO',
+  uno_word_5: 'WACKELN',
+  uno_word_6: 'SPLONK',
+  uno_word_7: 'FLAUSCHIG',
 };
 
 export default de;

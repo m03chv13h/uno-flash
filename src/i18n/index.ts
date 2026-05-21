@@ -22,6 +22,13 @@ export function t(
   return text;
 }
 
+/**
+ * Returns the 8 instant UNO trigger words translated to the given language.
+ */
+export function getInstantUnoWords(lang: string = 'en'): string[] {
+  return Array.from({ length: 8 }, (_, i) => t(`uno_word_${i}` as TranslationKey, lang));
+}
+
 export function getAvailableLanguages(): { code: string; label: string }[] {
   return [
     { code: 'en', label: 'English' },
