@@ -33,8 +33,8 @@ export default function PlayerStation({ player, isActive }: Props) {
         {/* Header */}
         <div className="station-header">
           <span className="player-label">{player.label}</span>
-          <span className="wins-badge">
-            W:{player.wins}
+          <span className="wins-badge" title="Wins" aria-label={`Wins: ${player.wins}`}>
+            🏆 {player.wins}
           </span>
         </div>
 
