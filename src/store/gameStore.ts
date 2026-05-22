@@ -243,7 +243,7 @@ export const useGameStore = create<GameStore>((set, get) => {
     config: {
       difficulty: 1 as Difficulty,
       gameMode: 'audio' as const,
-      language: 'en',
+      language: 'de',
       playerCount: 2,
       fillWithAI: true,
       soundEnabled: true,
