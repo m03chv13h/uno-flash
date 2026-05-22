@@ -348,14 +348,16 @@ export function passAction(
 
     case 'draw': {
       // Passing gives a penalty to the targeted neighbour (1-3 buttons relit)
+      // The user also decides the new play direction based on their pass choice
       const target = getPassTarget(currentPlayer, passDir, players);
       const penaltyCount = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3
       const updated = applyPenalty(players, target, penaltyCount);
+      const newDirection: Direction = passDir === 'right' ? 'clockwise' : 'counterclockwise';
       return {
         valid: true,
         players: updated,
-        direction,
-        nextPlayer: getNextActivePlayer(currentPlayer, direction, updated),
+        direction: newDirection,
+        nextPlayer: getNextActivePlayer(currentPlayer, newDirection, updated),
       };
     }
 
