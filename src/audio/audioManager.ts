@@ -32,8 +32,9 @@ function playTone(
   duration: number,
   type: OscillatorType = 'square',
   gain = 0.15,
+  force = false,
 ) {
-  if (!_enabled) return;
+  if (!_enabled && !force) return;
   try {
     const ctx = getCtx();
     const osc = ctx.createOscillator();
@@ -55,8 +56,9 @@ function playChord(
   duration: number,
   type: OscillatorType = 'square',
   gain = 0.1,
+  force = false,
 ) {
-  freqs.forEach((f) => playTone(f, duration, type, gain));
+  freqs.forEach((f) => playTone(f, duration, type, gain, force));
 }
 
 export const audioManager = {
@@ -104,15 +106,16 @@ export const audioManager = {
     playChord([440, 554, 659], 0.4, 'triangle', 0.15);
   },
 
-  /** Play one of the 8 weird instant UNO trigger sounds by index */
+  /** Play one of the 8 weird instant UNO trigger sounds by index.
+   *  Always plays regardless of the sound-effects toggle because this
+   *  is essential for audio-mode gameplay. */
   playInstantUnoTrigger(index: number) {
-    if (!_enabled) return;
     const sound = INSTANT_UNO_SOUNDS[index];
     if (!sound) return;
     if (sound.freqs.length === 1) {
-      playTone(sound.freqs[0], sound.duration, sound.type, sound.gain);
+      playTone(sound.freqs[0], sound.duration, sound.type, sound.gain, true);
     } else {
-      playChord(sound.freqs, sound.duration, sound.type, sound.gain);
+      playChord(sound.freqs, sound.duration, sound.type, sound.gain, true);
     }
   },
 
@@ -129,9 +132,10 @@ export const audioManager = {
     setTimeout(() => playTone(120, 0.3, 'sawtooth', 0.12), 200);
   },
 
-  /** Speak a command aloud using the Web Speech API */
+  /** Speak a command aloud using the Web Speech API.
+   *  Always speaks regardless of the sound-effects toggle because this
+   *  is essential for audio-mode gameplay. */
   speakCommand(text: string, lang: string) {
-    if (!_enabled) return;
     try {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text.toLowerCase());
