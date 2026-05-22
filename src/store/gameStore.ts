@@ -207,7 +207,7 @@ export const useGameStore = create<GameStore>((set, get) => {
   }
 
   function handleRoundWin(winner: PlayerIndex) {
-    const { players, _aiTimer } = get();
+    const { players, _aiTimer, config } = get();
     if (_aiTimer) clearTimeout(_aiTimer);
     clearTurnTimer();
 
@@ -223,7 +223,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         phase: 'game_over',
         gameWinner: winner,
         roundWinner: winner,
-        statusMessage: `${updated[winner].label} wins the game!`,
+        statusMessage: t('player_wins_game', config.language, { player: updated[winner].label }),
         currentCommand: null,
       });
       return;
@@ -233,7 +233,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       players: updated,
       phase: 'round_over',
       roundWinner: winner,
-      statusMessage: `${updated[winner].label} wins the round!`,
+      statusMessage: t('player_wins_round', config.language, { player: updated[winner].label }),
       currentCommand: null,
     });
   }
@@ -418,7 +418,7 @@ export const useGameStore = create<GameStore>((set, get) => {
 
     /* ── Handle UNO press ── */
     handleUnoPress: () => {
-      const { currentPlayer, players, currentCommand, direction, phase, instantUnoTriggerIndex } = get();
+      const { currentPlayer, players, currentCommand, direction, phase, instantUnoTriggerIndex, config } = get();
       if (phase !== 'playing' || !currentCommand) return;
 
       clearTurnTimer();
@@ -434,7 +434,6 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       if (!result.valid) {
         audioManager.invalidMove();
-        const { config } = get();
         const cmdText = t(currentCommand.displayText as TranslationKey, config.language);
         const penalized = applyPenalty(players, currentPlayer);
         set({ players: penalized, statusMessage: t('invalid_move_penalty', config.language, { command: cmdText }) });
@@ -445,7 +444,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       set({
         players: result.players,
         direction: result.direction,
-        statusMessage: 'INSTANT UNO!',
+        statusMessage: t('instant_uno', config.language),
       });
 
       if (hasWonRound(result.players[currentPlayer])) {

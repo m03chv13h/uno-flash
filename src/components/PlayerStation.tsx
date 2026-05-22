@@ -1,7 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import type { PlayerState, ButtonNumber } from '../types/game';
 import { BUTTON_MAP, BUTTON_NUMBERS } from '../types/game';
-import { t } from '../i18n';
+import { t, type TranslationKey } from '../i18n';
 
 interface Props {
   player: PlayerState;
@@ -44,7 +44,7 @@ export default function PlayerStation({ player, isActive }: Props) {
             player.type === 'human' ? 'human' : player.type === 'ai' ? 'ai' : 'empty-badge'
           }`}
         >
-          {player.type.toUpperCase()}
+          {t(player.type as TranslationKey, lang)}
         </span>
 
         {/* Color buttons */}
