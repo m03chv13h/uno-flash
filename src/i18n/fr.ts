@@ -8,6 +8,7 @@ const fr = {
   english: 'Anglais',
   player_count: 'Joueurs',
   fill_ai: 'Remplir les places vides avec l\'IA',
+  wins_to_win: 'Victoires pour gagner',
   start_game: 'COMMENCER',
   sound: 'Son',
   sound_on: 'OUI',
