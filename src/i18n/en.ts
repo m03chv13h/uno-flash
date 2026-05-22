@@ -8,6 +8,7 @@ const en = {
   english: 'English',
   player_count: 'Players',
   fill_ai: 'Fill empty seats with AI',
+  wins_to_win: 'Wins to Win',
   start_game: 'START GAME',
   sound: 'Sound',
   sound_on: 'ON',

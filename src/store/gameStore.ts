@@ -216,7 +216,7 @@ export const useGameStore = create<GameStore>((set, get) => {
     const updated = [...players];
     updated[winner] = { ...updated[winner], wins: updated[winner].wins + 1 };
 
-    if (hasWonGame(updated[winner], get().config.playerCount)) {
+    if (hasWonGame(updated[winner], get().config.winsToWin)) {
       setTimeout(() => audioManager.gameWin(), 400);
       set({
         players: updated,
@@ -247,6 +247,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       playerCount: 2,
       fillWithAI: true,
       soundEnabled: true,
+      winsToWin: 4,
     },
 
     phase: 'setup',

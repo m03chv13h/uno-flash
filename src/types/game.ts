@@ -45,6 +45,7 @@ export interface GameConfig {
   playerCount: number;
   fillWithAI: boolean;
   soundEnabled: boolean;
+  winsToWin: number;
 }
 
 /* Fixed button mapping */

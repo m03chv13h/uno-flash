@@ -8,6 +8,7 @@ const de = {
   english: 'Englisch',
   player_count: 'Spieler',
   fill_ai: 'Leere Plätze mit KI füllen',
+  wins_to_win: 'Siege zum Gewinn',
   start_game: 'SPIEL STARTEN',
   sound: 'Ton',
   sound_on: 'AN',

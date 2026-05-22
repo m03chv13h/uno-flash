@@ -78,6 +78,26 @@ export default function SetupScreen() {
         )}
       </div>
 
+      {/* Wins to Win */}
+      <div className="setup-panel">
+        <h3>{t('wins_to_win', lang)}</h3>
+        <select
+          className="language-select"
+          value={config.winsToWin}
+          onChange={(e) => {
+            audioManager.resume();
+            audioManager.buttonPress();
+            setConfig({ winsToWin: Number(e.target.value) });
+          }}
+        >
+          {[1, 2, 3, 4, 5, 6].map((n) => (
+            <option key={n} value={n}>
+              {n}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Language */}
       <div className="setup-panel">
         <h3>{t('language', lang)}</h3>
