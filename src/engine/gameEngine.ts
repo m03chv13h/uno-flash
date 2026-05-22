@@ -59,8 +59,8 @@ export function hasWonRound(p: PlayerState): boolean {
   return isPlayerActive(p) && litCount(p) === 0;
 }
 
-export function hasWonGame(p: PlayerState): boolean {
-  return p.wins >= ROUNDS_TO_WIN;
+export function hasWonGame(p: PlayerState, roundsToWin: number = ROUNDS_TO_WIN): boolean {
+  return p.wins >= roundsToWin;
 }
 
 /* ─── Next player ─────────────────────────── */
