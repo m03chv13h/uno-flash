@@ -79,7 +79,7 @@ export default function CenterConsole() {
           <div className="info-item">
             <div className="info-label">{t('round', lang)}</div>
             <div className="info-value">
-              {roundNumber} / {config.winsToWin}
+              {roundNumber}
             </div>
           </div>
           <div className="info-item">
