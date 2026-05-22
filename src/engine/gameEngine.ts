@@ -251,11 +251,9 @@ export function passAction(
   players: PlayerState[],
   command: Command,
   direction: Direction,
-  difficulty: Difficulty,
+  _difficulty: Difficulty,
   instantUnoTriggerIndex?: number,
 ): MoveResult {
-  const penaltiesEnabled = difficulty >= 2;
-
   // Determine expected direction:
   // For reverse commands, the player presses the direction they're changing TO.
   // For everything else, the player follows the current play direction.
@@ -291,36 +289,13 @@ export function passAction(
         };
       }
       // Button IS lit — they should press it, not pass.
-      // In level 1, forgiving; in level 2+, penalty if applicable.
-      if (!penaltiesEnabled) {
-        return {
-          valid: true,
-          players,
-          direction,
-          nextPlayer: getNextActivePlayer(currentPlayer, direction, players),
-          message: 'Passed, but button was available!',
-        };
-      }
-      // Penalty: relight a turned off button if any
-      const hasButtonsToRelight = players[currentPlayer].litButtons.some((lit) => !lit);
-      if (!hasButtonsToRelight) {
-        // All buttons already lit — can't relight more; treat as invalid
-        // so the store keeps the same command (advanceToNextPlayerSameCommand)
-        return {
-          valid: false,
-          players,
-          direction,
-          nextPlayer: currentPlayer,
-          message: 'Wrong move! All buttons already lit!',
-        };
-      }
-      const updated = applyPenalty(players, currentPlayer);
+      // No penalty: passing when button is available is allowed.
       return {
         valid: true,
-        players: updated,
+        players,
         direction,
-        nextPlayer: getNextActivePlayer(currentPlayer, direction, updated),
-        message: 'Wrong move! Penalty!',
+        nextPlayer: getNextActivePlayer(currentPlayer, direction, players),
+        message: 'Passed, but button was available!',
       };
     }
 
