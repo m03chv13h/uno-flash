@@ -15,7 +15,7 @@ const en = {
   sound_off: 'OFF',
   rules_title: 'Quick Rules',
   rules_summary:
-    'Each player has 4 colored buttons. Follow the command shown in the center. First to clear all buttons wins the round. First to win 4 rounds wins the game!',
+    'Each player has 4 colored buttons. Follow the command shown in the center. First to clear all buttons wins the round. First to win {winsToWin} rounds wins the game!',
 
   // Game screen
   command: 'COMMAND',

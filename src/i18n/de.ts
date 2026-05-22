@@ -15,7 +15,7 @@ const de = {
   sound_off: 'AUS',
   rules_title: 'Kurzregeln',
   rules_summary:
-    'Jeder Spieler hat 4 farbige Tasten. Befolge den Befehl in der Mitte. Wer zuerst alle Tasten leert, gewinnt die Runde. Wer zuerst 4 Runden gewinnt, gewinnt das Spiel!',
+    'Jeder Spieler hat 4 farbige Tasten. Befolge den Befehl in der Mitte. Wer zuerst alle Tasten leert, gewinnt die Runde. Wer zuerst {winsToWin} Runden gewinnt, gewinnt das Spiel!',
 
   // Game screen
   command: 'BEFEHL',
