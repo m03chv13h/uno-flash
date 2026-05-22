@@ -17,7 +17,7 @@ const en = {
   rules_summary:
     'Each player has 4 colored buttons. Follow the command shown in the center. First to clear all buttons wins the round. First to win {winsToWin} rounds wins the game!',
   rules_summary_singular:
-    'Each player has 4 colored buttons. Follow the command shown in the center. First to clear all buttons wins the round. First to win 1 round wins the game!',
+    'Each player has 4 colored buttons. Follow the command shown in the center. First to clear all buttons wins the round. First to win {winsToWin} round wins the game!',
 
   // Game screen
   command: 'COMMAND',

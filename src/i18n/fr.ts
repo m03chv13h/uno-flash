@@ -17,7 +17,7 @@ const fr = {
   rules_summary:
     'Chaque joueur a 4 boutons colorés. Suivez la commande affichée au centre. Le premier à vider tous ses boutons gagne la manche. Le premier à gagner {winsToWin} manches gagne la partie !',
   rules_summary_singular:
-    'Chaque joueur a 4 boutons colorés. Suivez la commande affichée au centre. Le premier à vider tous ses boutons gagne la manche. Le premier à gagner 1 manche gagne la partie !',
+    'Chaque joueur a 4 boutons colorés. Suivez la commande affichée au centre. Le premier à vider tous ses boutons gagne la manche. Le premier à gagner {winsToWin} manche gagne la partie !',
 
   // Game screen
   command: 'COMMANDE',
