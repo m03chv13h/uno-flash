@@ -1,6 +1,5 @@
 import { useGameStore } from '../store/gameStore';
 import { t, getInstantUnoWords, type TranslationKey } from '../i18n';
-import { ROUNDS_TO_WIN } from '../types/game';
 
 export default function CenterConsole() {
   const currentCommand = useGameStore((s) => s.currentCommand);
@@ -80,7 +79,7 @@ export default function CenterConsole() {
           <div className="info-item">
             <div className="info-label">{t('round', lang)}</div>
             <div className="info-value">
-              {roundNumber} / {ROUNDS_TO_WIN}
+              {roundNumber} / {config.playerCount}
             </div>
           </div>
           <div className="info-item">

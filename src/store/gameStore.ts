@@ -216,7 +216,7 @@ export const useGameStore = create<GameStore>((set, get) => {
     const updated = [...players];
     updated[winner] = { ...updated[winner], wins: updated[winner].wins + 1 };
 
-    if (hasWonGame(updated[winner])) {
+    if (hasWonGame(updated[winner], get().config.playerCount)) {
       setTimeout(() => audioManager.gameWin(), 400);
       set({
         players: updated,
