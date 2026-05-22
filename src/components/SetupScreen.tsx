@@ -161,7 +161,7 @@ export default function SetupScreen() {
       {/* Rules */}
       <div className="setup-panel">
         <h3>{t('rules_title', lang)}</h3>
-        <p className="rules-summary">{t('rules_summary', lang, { winsToWin: String(config.winsToWin) })}</p>
+        <p className="rules-summary">{config.winsToWin === 1 ? t('rules_summary_singular', lang) : t('rules_summary', lang, { winsToWin: String(config.winsToWin) })}</p>
       </div>
 
       {/* Start */}
